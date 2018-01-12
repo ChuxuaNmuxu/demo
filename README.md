@@ -1,1 +1,1 @@
-# demo
+mostly-adequate-guide
