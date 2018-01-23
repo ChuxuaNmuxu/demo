@@ -114,22 +114,29 @@ const either = curry((l, r, eitherFunctor) => {
 // TODO: 实现compose
 // func -> func -> ... -> func
 // const reverse = arr => [].concat(arr).reverse();
-const pipe = (f, g) => (...args) => g.call(this, f.apply(this, args));
-const compose = (...args) => args.reverse().reduce(pipe, args.shift());
+const _pipe = (f, g) => (...args) => g.call(this, f.apply(this, args));
 
-log(compose(x => x * x * 3, x => x - 1)(2));
+// pipe: function a => function a
+const pipe = (...args) => args.reduce(_pipe, args.shift());
+
+// const compose = (...args) => args.reverse().reduce(_pipe, args.shift());
+const compose = (...args) => pipe.apply(this, args.reverse());
+
+log(compose(x => x * x * 3, (x, y) => x - y)(2, 3));
+log(pipe(x => x * x * 3, x => x - 5)(2));
 
 class IO {
     constructor (func) {
         this.__value = func;
     }
 
+    // 暂时没用到
     static of (x) {  
         return new IO (() => x)
     }
 
-    map () {
-        return new IO()
+    map (f) {
+        return new IO(compose(f, this.__value))
     }
 }
 
