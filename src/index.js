@@ -144,7 +144,7 @@ const add = curry(
     (x, y) => x + y
 )
 const mapAdd = flodr(add, 0);
-log(81, mapAdd([1, 2, 3]))
+log(81, mapAdd([1, 2, 3]));
 
 /*
 * 递归重实现reduce
@@ -156,13 +156,13 @@ const foldr2 = (func, acc, arr) => {
 
     const [x, ...subArr] = arr;
 
-    return func(x, foldr2(func, acc, subArr));
+    return func(x)(foldr2(func, acc, subArr));
 }
 
 log(92, foldr2(add, 0, [1, 2, 3]));
 
 //再实现map
 const fold = curry(foldr2);
-const mapRe3 = func => fold(compose(glub, func), []);
+const mapRe3 = func => fold(compose(curry(glub), func), []);
 
-log(93, mapRe3(x => x + 1)([1, 2, 3]))
+log(93, mapRe3(x => x + 1)([1, 2, 3]));
