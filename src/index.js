@@ -156,6 +156,8 @@ const foldr2 = (func, acc, arr) => {
 
     const [x, ...subArr] = arr;
 
+    // x: arr的项
+    // 收缩左枝，生成compose(curry(glub), func)的运行结果
     return func(x)(foldr2(func, acc, subArr));
 }
 
@@ -163,6 +165,7 @@ log(92, foldr2(add, 0, [1, 2, 3]));
 
 //再实现map
 const fold = curry(foldr2);
+// func可能只接受一个参数，但glub接受两个参数，将glub curry后，compose得到的将是一个函数，于是可以再接受剩下的参数
 const mapRe3 = func => fold(compose(curry(glub), func), []);
 
-log(93, mapRe3(x => x + 1)([1, 2, 3]));
+log(93, mapRe3(add(3))([1, 2, 3]));
