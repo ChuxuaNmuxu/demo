@@ -42,3 +42,26 @@ numLongChains = length (filter isLong (map chain [1..10]))
 numLongChains' :: Int
 numLongChains' = length (filter (\xs -> length xs > 15) (map chain [1..100]))
 
+-- Lens
+-- type Lens b a = (Functor f) => (a -> f a) -> b -> f b
+
+-- posXLens :: Lens Position Double
+posXLens :: (Functor f) => (Double -> f Double) -> Position -> f Position
+
+posXLens f p =
+    let x = (posX p) -- x :: Double
+        x' = f x -- x' :: f Double
+        setter = \x -> p{posX = x} -- setter :: Double -> Position
+    in
+        fmap setter x' -- f Position
+
+-- test posXLens        
+mirror :: Double -> [Double]
+mirror x = [-x, x]
+
+data Position = Position {posX :: Double, posY :: Double}
+
+foo :: Position
+foo = Position 3 4
+
+
