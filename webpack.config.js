@@ -1,16 +1,22 @@
 const path = require('path');
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
+// 获取src下的文件目录
+const files = fs.readdirSync(path.join(__dirname, 'src'));
+const entry = files.reduce((acce, filename) => {
+    acce[path.basename(filename, '.js')] = path.join(__dirname, './src/', filename);
+    return acce;
+} , {})
+
 module.exports = {
-    entry: {
-        app: path.resolve(__dirname, './src/index.js')
-    },
+    entry,
 
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, './dist')
     },
 
