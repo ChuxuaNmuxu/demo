@@ -1,7 +1,7 @@
 const {log} = console;
 
 class Branch {
-    static a = 1;
+    static a = 'branch static';
 
     constructor (x) {
         this.x = x;
@@ -60,6 +60,24 @@ log(leaf1.show())
 log(leaf2.show())
 log(leaf2.showBranch())
 
+const o = {};
 
+var b = null;
 
+Object.defineProperty(o, 'm', {
+    set: value => {
+        b = value
+    }
+})
+
+o.m = 999;
+
+log('defineProperty: ', b, o.m)
+
+const obj = {
+    foo: 123,
+    get bar () {return 'abc'}
+}
+
+log(Object.getOwnPropertyDescriptors(obj))
 
