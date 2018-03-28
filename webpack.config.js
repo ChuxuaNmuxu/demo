@@ -32,7 +32,8 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({ // 生成html，并自动引入js文件
-            title: 'output management'
+            title: 'output management',
+            template: path.resolve(__dirname, 'src/template')
         }),
         new CleanWebpackPlugin(['dist']), // 每次打包清理dist文件夹
         new webpack.HotModuleReplacementPlugin() // 热加载
@@ -53,6 +54,16 @@ module.exports = {
                     'style-loader',
                     'css-loader'
                 ]
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "sass-loader" // compiles Sass to CSS
+                }]
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
