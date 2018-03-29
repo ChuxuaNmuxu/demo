@@ -37,32 +37,46 @@ module.exports = merge(baseConfig, {
             },
             {
                 test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "isomorphic-style-loader",
-                    use: [{
-                            loader: 'css-loader',
-                            options: {
-                                modules: true,
-                                importLoaders: 1,
-                                localIdentName: '[name]__[local]___[hash:base64:5]',
-                                sourceMap: true
-                            }
-                        },
-                        {
-                            loader: 'sass-loader'
+                use: ['isomorphic-style-loader',{
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            importLoaders: 1,
+                            localIdentName: '[name]__[local]___[hash:base64:5]',
+                            sourceMap: true
                         }
-                    ]
-                })
+                    },
+                    {
+                        loader: 'sass-loader'
+                    }
+                ]
+
+                // use: ExtractTextPlugin.extract({
+                //     fallback: "isomorphic-style-loader",
+                //     use: [{
+                //             loader: 'css-loader',
+                //             options: {
+                //                 modules: true,
+                //                 importLoaders: 1,
+                //                 localIdentName: '[name]__[local]___[hash:base64:5]',
+                //                 sourceMap: true
+                //             }
+                //         },
+                //         {
+                //             loader: 'sass-loader'
+                //         }
+                //     ]
+                // })
             } 
         ]
     },
 
-    plugins: [
-        new ExtractTextPlugin({
-            filename: 'styles.css',
-            allChunks: true
-        }),
-    ],
+    // plugins: [
+    //     new ExtractTextPlugin({
+    //         filename: 'styles.css',
+    //         allChunks: true
+    //     }),
+    // ],
 
     // ignore node_modules
     externals: [nodeExternals()]

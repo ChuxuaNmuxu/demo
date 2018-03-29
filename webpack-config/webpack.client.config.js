@@ -2,6 +2,7 @@ const baseConfig = require('./webpack.base.config');
 const merge = require('webpack-merge')
 const webpack = require('webpack');
 const path = require('path');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(baseConfig, {
@@ -25,19 +26,20 @@ module.exports = merge(baseConfig, {
             },
             {
                 test: /\.s?css$/,
-                use: [{
-                    loader: "style-loader" // creates style nodes from JS strings
-                }, {
-                    loader: "css-loader", // translates CSS into CommonJS
-                    options: {
-                        modules: true,
-                        importLoaders: 1,
-                        localIdentName: '[name]__[local]___[hash:base64:5]',
-                        sourceMap: true
-                    }
-                }, {
-                    loader: "sass-loader" // compiles Sass to CSS
-                }]
+                use: ExtractTextPlugin.extract({
+                    fallback: "style-loader",
+                    use: [{
+                        loader: "css-loader", // translates CSS into CommonJS
+                        options: {
+                            modules: true,
+                            importLoaders: 1,
+                            localIdentName: '[name]__[local]___[hash:base64:5]',
+                            sourceMap: true
+                        }
+                    }, {
+                        loader: "sass-loader" // compiles Sass to CSS
+                    }]
+                })
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
@@ -52,5 +54,12 @@ module.exports = merge(baseConfig, {
                 ]
             },
         ]
-    }
+    },
+
+    plugins: [
+        new ExtractTextPlugin({
+            filename: 'styles.css',
+            allChunks: true
+        })
+    ],
 })
