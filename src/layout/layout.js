@@ -9,7 +9,8 @@ const layout = (html, path) => `
     </head>
     <body>
         <div id='root'>${html}</div>
-        <script src='${path}' />
+        <script src='${path}'></script>
     </body>
     </html>
 `
+module.exports = layout;

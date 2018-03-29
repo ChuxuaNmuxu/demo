@@ -20,8 +20,8 @@ class App extends Component {
     }
     render() {
         return (
-            <div className='app' styleName='app'>
-                cool ! 
+            <div className='app' styleName='app' onClick={this._handleClick}>
+                cool ! !!!!!
                 <div className="container">
                     App demo !
                 </div>

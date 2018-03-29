@@ -4,8 +4,8 @@ const path = require('path');
 // const Root = require('./src/component/app').default;
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const loyout = require('./src/layout/layout');
-const Root = require('./dist/server.js').default;
+const layout = require('./src/layout/layout');
+const Root = require('./dist/server').default;
 
 const server = express();
 
@@ -16,7 +16,7 @@ server.get('/', (request, response) => {
         React.createElement(Root)
     );
 
-    const html = layout(rootHtml, path.resolve(__dirname, 'dist/client.js'));
+    const html = layout(rootHtml, '/client.js');
     response.send(html);
 });
 

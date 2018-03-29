@@ -3,7 +3,6 @@ const merge = require('webpack-merge')
 const webpack = require('webpack');
 const path = require('path');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = merge(baseConfig, {
     entry: {
@@ -14,15 +13,7 @@ module.exports = merge(baseConfig, {
     //     publicPath: path.resolve(__dirname, '../dist')
     // },
 
-    plugins: [
-        // new HtmlWebpackPlugin({ // 生成html，并自动引入js文件
-        //     title: 'output management',
-        //     template: path.join(__dirname, '../src/layout/layout.html')
-        // }),
-        new CleanWebpackPlugin(['dist']), // 每次打包清理dist文件夹
-        // new webpack.HotModuleReplacementPlugin(), // 热加载
-        // new UglifyJSPlugin() // tree shaking 不加载没有使用的模块
-    ],
+    devtool: 'inline-source-map', // source map
 
     module: {
         rules: [
@@ -38,6 +29,19 @@ module.exports = merge(baseConfig, {
                     'style-loader',
                     'css-loader'
                 ]
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader", // translates CSS into CommonJS
+                    options: {
+                        modules: true
+                    }
+                }, {
+                    loader: "sass-loader" // compiles Sass to CSS
+                }]
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,
