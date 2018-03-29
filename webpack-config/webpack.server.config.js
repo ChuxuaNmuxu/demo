@@ -2,6 +2,7 @@ const baseConfig = require('./webpack.base.config');
 const merge = require('webpack-merge')
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = merge(baseConfig, {
     entry: {
@@ -36,26 +37,32 @@ module.exports = merge(baseConfig, {
             },
             {
                 test: /\.scss$/,
-                use: [
-                    {
-                        loader: 'isomorphic-style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                            importLoaders: 1,
-                            localIdentName: '[name]__[local]___[hash:base64:5]',
-                            sourceMap: true
+                use: ExtractTextPlugin.extract({
+                    fallback: "isomorphic-style-loader",
+                    use: [{
+                            loader: 'css-loader',
+                            options: {
+                                modules: true,
+                                importLoaders: 1,
+                                localIdentName: '[name]__[local]___[hash:base64:5]',
+                                sourceMap: true
+                            }
+                        },
+                        {
+                            loader: 'sass-loader'
                         }
-                    },
-                    {
-                        loader: 'sass-loader'
-                    }
-                ]
+                    ]
+                })
             } 
         ]
     },
+
+    plugins: [
+        new ExtractTextPlugin({
+            filename: 'styles.css',
+            allChunks: true
+        }),
+    ],
 
     // ignore node_modules
     externals: [nodeExternals()]
