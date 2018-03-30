@@ -7,24 +7,33 @@ const ReactDOMServer = require('react-dom/server');
 const layout = require('./src/layout/layout');
 const serverRender = require('./dist/server').default;
 
-console.log('severRender: ',serverRender)
-
-
 const server = express();
 
 server.use(express.static('dist'));
 
-server.get('/', (request, response) => {
+server.get('*', (request, response) => {
     // 将请求的url传递给路由
-    const Root = serverRender({location: request.url});
+    const context = {};
+    console.log('request.url: ', request.url)
+    serverRender({
+        location: request.url,
+        context
+    })
+    .then(Root => {
+        const rootHtml = ReactDOMServer.renderToString(
+            // React.createElement(Root)
+            Root
+        );
+    
+        const html = layout(rootHtml, '/client.js');
+        console.log('context: ', context)
 
-    const rootHtml = ReactDOMServer.renderToString(
-        // React.createElement(Root)
-        Root
-    );
-
-    const html = layout(rootHtml, '/client.js');
-    response.send(html);
+        if (context.url) {
+            response.redirect(context.url);
+        } else {
+            response.send(html);
+        }
+    })
 });
 
 // 服务器端口

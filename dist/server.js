@@ -61,7 +61,7 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -84,80 +84,10 @@ module.exports = require("react-router-dom");
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = __webpack_require__(1);
-
-var _home = __webpack_require__(3);
-
-var _home2 = _interopRequireDefault(_home);
-
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : { default: obj };
-}
-
-/**
- * 服务端静态路由
- * @param {object} config 路由参数 @https://reacttraining.com/react-router/web/api/StaticRouter
- */
-var serverAppComstructor = function serverAppComstructor(config) {
-    return _react2.default.createElement(_reactRouterDom.StaticRouter, config, _react2.default.createElement(_home2.default, null));
-};
-
-exports.default = serverAppComstructor;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRouterDom = __webpack_require__(1);
-
-var _app = __webpack_require__(4);
-
-var _app2 = _interopRequireDefault(_app);
-
-var _about = __webpack_require__(13);
-
-var _about2 = _interopRequireDefault(_about);
-
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : { default: obj };
-}
-
-var Home = function Home() {
-    return _react2.default.createElement('div', null, _react2.default.createElement('ul', null, _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/' }, 'Home')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/about' }, 'About'))), _react2.default.createElement('hr', null), _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _app2.default }), _react2.default.createElement(_reactRouterDom.Route, { path: '/about', component: _about2.default }));
-};
-
-exports.default = Home;
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _app = __webpack_require__(5);
+var _app = __webpack_require__(7);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -168,7 +98,159 @@ function _interopRequireDefault(obj) {
 exports.default = _app2.default;
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _about = __webpack_require__(15);
+
+var _about2 = _interopRequireDefault(_about);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+exports.default = _about2.default;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _app = __webpack_require__(2);
+
+var _app2 = _interopRequireDefault(_app);
+
+var _about = __webpack_require__(3);
+
+var _about2 = _interopRequireDefault(_about);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var routes = [{
+    path: '/',
+    component: _app2.default
+}, {
+    path: '/about',
+    component: _about2.default
+}];
+
+exports.default = routes;
+
+/***/ }),
 /* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(1);
+
+var _home = __webpack_require__(6);
+
+var _home2 = _interopRequireDefault(_home);
+
+var _routes = __webpack_require__(4);
+
+var _routes2 = _interopRequireDefault(_routes);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+/**
+ * 服务端静态路由
+ * @param {object} config 路由参数 @https://reacttraining.com/react-router/web/api/StaticRouter
+ */
+var serverAppComstructor = function serverAppComstructor(config) {
+    // load data
+    // matchPath 相当于渲染之外的route,可以匹配路由，参数和route一致，（route是组件，所以只能在渲染的时候去匹配）,可以用来预加载数据等
+    // matchPath 第二个参数与第一个参数竞争匹配（优先匹配这个，不知道有什么用）
+    var url = config.url;
+
+    var promises = [];
+    _routes2.default.some(function (route) {
+        var match = (0, _reactRouterDom.matchPath)(url, route);
+        if (match) {
+            var fetchData = route.loadData ? route.loadData(match) : Promise.resolve('');
+            promises.push(fetchData);
+        }
+    });
+
+    // 服务器端路由只需要接受客户端请求的地址，而不需要监听浏览器location的变化，所以使用静态路由
+    // BroserRouter会接受浏览器的api（history，dom...），用在服务端会报错
+    return Promise.all(promises).then(function (data) {
+        return _react2.default.createElement(_reactRouterDom.StaticRouter, config, _react2.default.createElement(_home2.default, { data: data }));
+    });
+};
+
+exports.default = serverAppComstructor;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(1);
+
+var _app = __webpack_require__(2);
+
+var _app2 = _interopRequireDefault(_app);
+
+var _about = __webpack_require__(3);
+
+var _about2 = _interopRequireDefault(_about);
+
+var _routes = __webpack_require__(4);
+
+var _routes2 = _interopRequireDefault(_routes);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var Home = function Home() {
+    return _react2.default.createElement('div', null, _react2.default.createElement('ul', null, _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/' }, 'Home')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/about' }, 'About')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/previte' }, 'previte'))), _react2.default.createElement('hr', null), _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, render: function render() {
+            return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/about' });
+        } }), _react2.default.createElement(_reactRouterDom.Route, { path: '/about', component: _about2.default }));
+};
+
+exports.default = Home;
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -194,11 +276,11 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactCssModules = __webpack_require__(6);
+var _reactCssModules = __webpack_require__(8);
 
 var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-var _app = __webpack_require__(7);
+var _app = __webpack_require__(9);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -272,18 +354,18 @@ var App = function (_Component) {
 exports.default = (0, _reactCssModules2.default)(App, _app2.default);
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-css-modules");
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-    var content = __webpack_require__(8);
-    var insertCss = __webpack_require__(10);
+    var content = __webpack_require__(10);
+    var insertCss = __webpack_require__(12);
 
     if (typeof content === 'string') {
       content = [[module.i, content, '']];
@@ -313,23 +395,23 @@ module.exports = require("react-css-modules");
   
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(9)(true);
+exports = module.exports = __webpack_require__(11)(true);
 // imports
 
 
 // module
-exports.push([module.i, ".app__app___1VKle {\n  color: red; }\n  .app__app___1VKle .container {\n    background-color: orange; }\n", "", {"version":3,"sources":["E:/Documents/04repo/demos/demo/src/component/app/app.scss"],"names":[],"mappings":"AAAA;EACE,WAAW,EAAE;EACb;IACE,yBAAyB,EAAE","file":"app.scss","sourcesContent":[".app {\n  color: red; }\n  .app :global .container {\n    background-color: orange; }\n"],"sourceRoot":""}]);
+exports.push([module.i, ".app__app___uv2w_ {\n  color: red; }\n  .app__app___uv2w_ .container {\n    background-color: orange; }\n", "", {"version":3,"sources":["E:/Documents/04repo/demos/demo/src/view/app/app.scss"],"names":[],"mappings":"AAAA;EACE,WAAW,EAAE;EACb;IACE,yBAAyB,EAAE","file":"app.scss","sourcesContent":[".app {\n  color: red; }\n  .app :global .container {\n    background-color: orange; }\n"],"sourceRoot":""}]);
 
 // exports
 exports.locals = {
-	"app": "app__app___1VKle"
+	"app": "app__app___uv2w_"
 };
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -412,17 +494,17 @@ function toComment(sourceMap) {
 }
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _stringify = __webpack_require__(11);
+var _stringify = __webpack_require__(13);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
-var _slicedToArray2 = __webpack_require__(12);
+var _slicedToArray2 = __webpack_require__(14);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -542,40 +624,19 @@ function insertCss(styles) {
 module.exports = insertCss;
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/helpers/slicedToArray");
 
 /***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _about = __webpack_require__(14);
-
-var _about2 = _interopRequireDefault(_about);
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : { default: obj };
-}
-
-exports.default = _about2.default;
-
-/***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
