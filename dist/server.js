@@ -188,11 +188,13 @@ var serverAppComstructor = function serverAppComstructor(config) {
     // load data
     // matchPath 相当于渲染之外的route,可以匹配路由，参数和route一致，（route是组件，所以只能在渲染的时候去匹配）,可以用来预加载数据等
     // matchPath 第二个参数与第一个参数竞争匹配（优先匹配这个，不知道有什么用）
-    var url = config.url;
+    var location = config.location;
 
     var promises = [];
     _routes2.default.some(function (route) {
-        var match = (0, _reactRouterDom.matchPath)(url, route);
+        console.log('route: ', route);
+        var match = (0, _reactRouterDom.matchPath)(location);
+        console.log('match: ', match);
         if (match) {
             var fetchData = route.loadData ? route.loadData(match) : Promise.resolve('');
             promises.push(fetchData);
@@ -242,9 +244,11 @@ function _interopRequireDefault(obj) {
 }
 
 var Home = function Home() {
-    return _react2.default.createElement('div', null, _react2.default.createElement('ul', null, _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/' }, 'Home')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/about' }, 'About')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/previte' }, 'previte'))), _react2.default.createElement('hr', null), _react2.default.createElement(_reactRouterDom.Route, { path: '/', exact: true, render: function render() {
-            return _react2.default.createElement(_reactRouterDom.Redirect, { to: '/about' });
-        } }), _react2.default.createElement(_reactRouterDom.Route, { path: '/about', component: _about2.default }));
+    return _react2.default.createElement('div', null, _react2.default.createElement('ul', null, _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/' }, 'Home')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/about' }, 'About')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/previte' }, 'previte'))), _react2.default.createElement('hr', null), _routes2.default.map(function (_ref) {
+        var component = _ref.component,
+            path = _ref.path;
+        return _react2.default.createElement(_reactRouterDom.Route, { component: component, path: path, key: path });
+    }));
 };
 
 exports.default = Home;

@@ -11,11 +11,11 @@ import {matchPath} from 'react-router-dom'
 const serverAppComstructor = config => {
     // load data
     // matchPath 相当于渲染之外的route,可以匹配路由，参数和route一致，（route是组件，所以只能在渲染的时候去匹配）,可以用来预加载数据等
-    // matchPath 第二个参数与第一个参数竞争匹配（优先匹配这个，不知道有什么用）
-    const {url} = config;
+    // matchPath 第二个参数与第一个参数竞争匹配（好像是更严格的限制条件）
+    const {location} = config;
     const promises = [];
     routes.some(route => {
-        const match = matchPath(url, route);
+        const match = matchPath(location, route);
         if (match) {
             const fetchData = route.loadData ? route.loadData(match) : Promise.resolve('');
             promises.push(fetchData)   
