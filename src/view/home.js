@@ -18,6 +18,9 @@ const Home = () => (
             routes.map(({component, path}) => <Route component={component} path={path} key={path}/>)
         } */}
 
+        {
+            // 使用exact, 否知会一直匹配/，导致无限重定向
+        }
         <Route path='/' exact render={() => <Redirect  to='/about' />} />
         <Route path='/about' component={About} />
     </div>
