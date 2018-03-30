@@ -5,15 +5,22 @@ const path = require('path');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const layout = require('./src/layout/layout');
-const Root = require('./dist/server').default;
+const serverRender = require('./dist/server').default;
+
+console.log('severRender: ',serverRender)
+
 
 const server = express();
 
 server.use(express.static('dist'));
 
 server.get('/', (request, response) => {
+    // 将请求的url传递给路由
+    const Root = serverRender({location: request.url});
+
     const rootHtml = ReactDOMServer.renderToString(
-        React.createElement(Root)
+        // React.createElement(Root)
+        Root
     );
 
     const html = layout(rootHtml, '/client.js');

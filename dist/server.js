@@ -61,11 +61,93 @@ module.exports =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = require("react");
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+module.exports = require("react-router-dom");
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(1);
+
+var _home = __webpack_require__(3);
+
+var _home2 = _interopRequireDefault(_home);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+/**
+ * 服务端静态路由
+ * @param {object} config 路由参数 @https://reacttraining.com/react-router/web/api/StaticRouter
+ */
+var serverAppComstructor = function serverAppComstructor(config) {
+    return _react2.default.createElement(_reactRouterDom.StaticRouter, config, _react2.default.createElement(_home2.default, null));
+};
+
+exports.default = serverAppComstructor;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouterDom = __webpack_require__(1);
+
+var _app = __webpack_require__(4);
+
+var _app2 = _interopRequireDefault(_app);
+
+var _about = __webpack_require__(13);
+
+var _about2 = _interopRequireDefault(_about);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var Home = function Home() {
+    return _react2.default.createElement('div', null, _react2.default.createElement('ul', null, _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/' }, 'Home')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouterDom.Link, { to: '/about' }, 'About'))), _react2.default.createElement('hr', null), _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _app2.default }), _react2.default.createElement(_reactRouterDom.Route, { path: '/about', component: _about2.default }));
+};
+
+exports.default = Home;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -75,7 +157,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _app = __webpack_require__(1);
+var _app = __webpack_require__(5);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -86,7 +168,7 @@ function _interopRequireDefault(obj) {
 exports.default = _app2.default;
 
 /***/ }),
-/* 1 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -108,15 +190,15 @@ var _createClass = function () {
     };
 }();
 
-var _react = __webpack_require__(2);
+var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactCssModules = __webpack_require__(3);
+var _reactCssModules = __webpack_require__(6);
 
 var _reactCssModules2 = _interopRequireDefault(_reactCssModules);
 
-var _app = __webpack_require__(4);
+var _app = __webpack_require__(7);
 
 var _app2 = _interopRequireDefault(_app);
 
@@ -190,24 +272,18 @@ var App = function (_Component) {
 exports.default = (0, _reactCssModules2.default)(App, _app2.default);
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = require("react");
-
-/***/ }),
-/* 3 */
+/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("react-css-modules");
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-    var content = __webpack_require__(5);
-    var insertCss = __webpack_require__(7);
+    var content = __webpack_require__(8);
+    var insertCss = __webpack_require__(10);
 
     if (typeof content === 'string') {
       content = [[module.i, content, '']];
@@ -223,8 +299,8 @@ module.exports = require("react-css-modules");
     // Only activated in browser context
     if (false) {
       var removeCss = function() {};
-      module.hot.accept("!!../../node_modules/css-loader/index.js??ref--2-1!../../node_modules/sass-loader/lib/loader.js!./app.scss", function() {
-        content = require("!!../../node_modules/css-loader/index.js??ref--2-1!../../node_modules/sass-loader/lib/loader.js!./app.scss");
+      module.hot.accept("!!../../../node_modules/css-loader/index.js??ref--2-1!../../../node_modules/sass-loader/lib/loader.js!./app.scss", function() {
+        content = require("!!../../../node_modules/css-loader/index.js??ref--2-1!../../../node_modules/sass-loader/lib/loader.js!./app.scss");
 
         if (typeof content === 'string') {
           content = [[module.id, content, '']];
@@ -237,23 +313,23 @@ module.exports = require("react-css-modules");
   
 
 /***/ }),
-/* 5 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(true);
+exports = module.exports = __webpack_require__(9)(true);
 // imports
 
 
 // module
-exports.push([module.i, ".app__app___3moi_ {\n  color: red; }\n  .app__app___3moi_ .container {\n    background-color: orange; }\n", "", {"version":3,"sources":["E:/Documents/04repo/demos/demo/src/component/app.scss"],"names":[],"mappings":"AAAA;EACE,WAAW,EAAE;EACb;IACE,yBAAyB,EAAE","file":"app.scss","sourcesContent":[".app {\n  color: red; }\n  .app :global .container {\n    background-color: orange; }\n"],"sourceRoot":""}]);
+exports.push([module.i, ".app__app___1VKle {\n  color: red; }\n  .app__app___1VKle .container {\n    background-color: orange; }\n", "", {"version":3,"sources":["E:/Documents/04repo/demos/demo/src/component/app/app.scss"],"names":[],"mappings":"AAAA;EACE,WAAW,EAAE;EACb;IACE,yBAAyB,EAAE","file":"app.scss","sourcesContent":[".app {\n  color: red; }\n  .app :global .container {\n    background-color: orange; }\n"],"sourceRoot":""}]);
 
 // exports
 exports.locals = {
-	"app": "app__app___3moi_"
+	"app": "app__app___1VKle"
 };
 
 /***/ }),
-/* 6 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -336,17 +412,17 @@ function toComment(sourceMap) {
 }
 
 /***/ }),
-/* 7 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _stringify = __webpack_require__(8);
+var _stringify = __webpack_require__(11);
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
-var _slicedToArray2 = __webpack_require__(9);
+var _slicedToArray2 = __webpack_require__(12);
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -466,16 +542,62 @@ function insertCss(styles) {
 module.exports = insertCss;
 
 /***/ }),
-/* 8 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/core-js/json/stringify");
 
 /***/ }),
-/* 9 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("babel-runtime/helpers/slicedToArray");
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _about = __webpack_require__(14);
+
+var _about2 = _interopRequireDefault(_about);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+
+exports.default = _about2.default;
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var About = function About() {
+    return _react2.default.createElement('div', null, 'react-router 4\u7684staticRouter\u548CbrowserRouter\u6709\u4EC0\u4E48\u533A\u522B');
+};
+
+exports.default = About;
 
 /***/ })
 /******/ ]);
