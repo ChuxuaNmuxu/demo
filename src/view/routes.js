@@ -1,5 +1,5 @@
-import App from './app';
-import About from './about';
+import App from './page/app';
+import About from './page/about';
 
 const routes = [
     {

@@ -4,7 +4,7 @@ const path = require('path');
 // const Root = require('./src/component/app').default;
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
-const layout = require('./src/layout/layout');
+const layout = require('./src/view/layout/layout');
 const serverRender = require('./dist/server').default;
 
 const server = express();
@@ -19,14 +19,17 @@ server.get('*', (request, response) => {
         location: request.url,
         context
     })
-    .then(Root => {
+    .then(({Root, preloadedState: initialState}) => {
         const rootHtml = ReactDOMServer.renderToString(
             // React.createElement(Root)
             Root
         );
-    
-        const html = layout(rootHtml, '/client.js');
-        console.log('context: ', context)
+
+        const html = layout({
+            html: rootHtml,
+            path: '/client.js',
+            initialState
+        });
 
         if (context.url) {
             response.redirect(context.url);

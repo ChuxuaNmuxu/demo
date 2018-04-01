@@ -2,7 +2,7 @@ import React from 'react';
 import {Route, Link, Redirect} from 'react-router-dom';
 import App from './app';
 import About from './about';
-import routes from './routes';
+import routes from '../routes';
 
 const Home = () => (
     <div>
@@ -19,7 +19,7 @@ const Home = () => (
         }
 
         {
-            // 使用exact, 否知会一直匹配/，导致无限重定向
+            // 使用exact, 否知会一直匹配'/'，导致无限重定向
         }
         {/* <Route path='/' exact render={() => <Redirect  to='/about' />} />
         <Route path='/about' component={About} /> */}

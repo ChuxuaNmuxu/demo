@@ -15,7 +15,7 @@ module.exports = {
     // },
 
     // entry 相对的路径
-    context: path.resolve(__dirname, '../src/entry'),
+    context: path.resolve(__dirname, '../src/view/entry'),
 
     output: {
         filename: '[name].js',
@@ -24,7 +24,8 @@ module.exports = {
 
     resolve: {
         alias: {
-            component: path.join(__dirname, '../src/component/')
+            component: path.join(__dirname, '../src/component/'),
+            src: path.join(__dirname, '../src')
         },
         extensions: ['.js', '.jsx']
     },
