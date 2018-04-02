@@ -11,15 +11,23 @@ const common = {
         loaders: [
             {
                 test: /\.js$/,
-                include: [
-                path.join(__dirname, '../components'),
-                path.join(__dirname, '../core'),
-                path.join(__dirname, '../data'),
-                path.join(__dirname, '../routes'),
-                path.join(__dirname, '../client.js'),
-                path.join(__dirname, '../server.js')
-                ],
+                exclude: /node_modules/ ,
                 loader: 'babel-loader'
+            },
+            {
+                test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+                loader: 'url-loader?limit=10000'
+            },
+            {
+                test: /\.(eot|ttf|wav|mp3)$/,
+                loader: 'file-loader'
+            },
+            {
+                test: /\.scss$/,
+                include: [
+                    path.join(__dirname, '../components')
+                ],
+                loader: 'style-loader!css-loader?modules&' + 'localIdentName=[name]_[local]_[hash:base64:3]!' + 'postcss-loader'
             }
         ]
     }
@@ -52,5 +60,6 @@ const server = extend(true, {}, common, {
     },
     externals: /^[a-z][a-z\/\.\-0-9]*$/i
 });
+
 
 module.exports = [client, server];

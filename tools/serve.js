@@ -9,6 +9,7 @@ async function serve() {
     const app = path.join(__dirname, '../build/server.js')
     const gaze = Promise.promisify(require('gaze'));
     await run(build, { watch });
+    console.log('await run build')
     await new Promise((resolve, reject) => {
         function start() {
             const server = cp.spawn(
