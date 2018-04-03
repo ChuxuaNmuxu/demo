@@ -48,6 +48,9 @@ module.exports = merge(baseConfig, {
                     },
                     {
                         loader: 'sass-loader'
+                    },
+                    {
+                        loader: 'postcss-loader'
                     }
                 ]
 
@@ -70,7 +73,6 @@ module.exports = merge(baseConfig, {
             } 
         ]
     },
-
     // plugins: [
     //     new ExtractTextPlugin({
     //         filename: 'styles.css',

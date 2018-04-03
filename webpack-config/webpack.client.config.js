@@ -38,6 +38,9 @@ module.exports = merge(baseConfig, {
                         }
                     }, {
                         loader: "sass-loader" // compiles Sass to CSS
+                    },
+                    {
+                        loader: 'postcss-loader'
                     }]
                 })
             },

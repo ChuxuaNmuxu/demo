@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import {connect} from 'react-redux';
 import styles from './app.scss';
-import {addTodo} from 'src/action'
+import {addTodo} from 'src/action';
+console.log('styles: ', styles);
 
 class App extends Component {
     constructor (props) {
