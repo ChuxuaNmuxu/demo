@@ -4,3 +4,9 @@ import App from 'component/app';
 
 const root = document.getElementById('root');
 ReactDom.render(<App />, root);
+
+console.log('module.hot: ', module.hot)
+
+if (module.hot) {
+    module.hot.accept('../component/app.js');
+}
