@@ -5,11 +5,11 @@ const path = require('path');
 const React = require('react');
 const ReactDOMServer = require('react-dom/server');
 const layout = require('./src/view/layout/layout');
-const serverRender = require('./dist/server').default;
+const serverRender = require('./build/server').default;
 
 const server = express();
-
-server.use(express.static('dist'));
+console.log('server: ', server)
+server.use(express.static('build'));
 
 server.get('*', (request, response) => {
     // 将请求的url传递给路由
