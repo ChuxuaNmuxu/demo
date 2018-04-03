@@ -10,9 +10,11 @@ module.exports = merge(baseConfig, {
         client: './client'
     },
 
-    // output: {
-    //     publicPath: path.resolve(__dirname, '../dist')
-    // },
+    output: {
+        publicPath: '/',
+        path: path.join(__dirname, '../build/public'),
+        filename: 'client.js'
+    },
 
     devtool: 'inline-source-map', // source map
 
@@ -77,10 +79,10 @@ module.exports = merge(baseConfig, {
         ]
     },
 
-    plugins: [
-        new ExtractTextPlugin({
-            filename: 'styles.css',
-            allChunks: true
-        })
-    ],
+    // plugins: [
+    //     new ExtractTextPlugin({
+    //         filename: 'styles.css',
+    //         allChunks: true
+    //     })
+    // ],
 })

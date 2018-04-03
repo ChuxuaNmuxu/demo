@@ -6,7 +6,7 @@ const run = require('./run');
 
 async function serve() {
     const watch = true;
-    const app = path.join(__dirname, '../build/server.js')
+    const app = path.join(__dirname, '../build/server.js');
     const gaze = Promise.promisify(require('gaze'));
     await run(build, { watch });
     console.log('await run build')

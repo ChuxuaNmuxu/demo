@@ -27,7 +27,7 @@ server.get('*', (request, response) => {
 
         const html = layout({
             html: rootHtml,
-            path: '/client.js',
+            path: 'client.js',
             initialState
         });
 

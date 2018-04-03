@@ -4,7 +4,7 @@ const run = require('./run');
 const del = require('del');
 const webpack = require('webpack');
 const Promise = require('bluebird');
-const webpackConfig = require('./webpack.config');
+const webpackConfig = require('./webpack.dev.config');
 
 async function clean() {
     await del(['build/*', '!build/.git'], { dot: true });
@@ -21,7 +21,7 @@ async function bundle({watch}) {
     return new Promise((resolve, reject) => {
         let runCount = 0;
         const bundler = webpack(webpackConfig);
-        const bundlers = isArray(bundler.compilers) ? bundler.compilers : [bundler];
+        // const bundlers = isArray(bundler.compilers) ? bundler.compilers : [bundler];
 
         const cb = (err, stats) => {
             if (err) {
@@ -30,25 +30,16 @@ async function bundle({watch}) {
 
             //stats.toString(options) 将编译信息以字符串的形式给出，options参数为配置
             console.log(stats.toString(webpackConfig[0].stats));
-            console.log(runCount)
-            if (runCount === (watch ? webpackConfig.length : 1)) {
-                console.log('resolve')
-                return resolve();
-            }
+            // if (runCount === (watch ? webpackConfig.length : 1)) {
+            // }
+            return resolve();
         };
 
-        console.log('watch: ', watch);
         if (watch) {
-            bundlers.forEach(bundle => {
-                ++runCount;
-                bundler.watch(200, cb);
-            });
+            bundler.watch(200, cb);
         } else {
             // run webpack normally
-            bundlers.forEach(bundle => {
-                ++runCount;
-                bundler.watch(cb);
-            });
+            bundler.watch(cb);
         }
     });
 }

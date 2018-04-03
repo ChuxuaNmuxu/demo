@@ -10,6 +10,8 @@ module.exports = merge(baseConfig, {
     },
     
     output: {
+        path: path.join(__dirname, '../build'),
+        filename: 'server.js',
         libraryTarget: 'commonjs2'
     },
 

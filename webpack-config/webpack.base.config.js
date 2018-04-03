@@ -10,17 +10,14 @@ const path = require('path');
 // } , {})
 
 module.exports = {
-    // entry: {
-    //     client: path.join(__dirname, 'src/entry/client.js')
-    // },
+    // 编译时输出信息配置
+    stats: {
+        colors: true,
+        chunks: false
+    },
 
     // entry 相对的路径
     context: path.resolve(__dirname, '../src/view/entry'),
-
-    output: {
-        filename: '[name].js',
-        path: path.resolve(__dirname, '../dist')
-    },
 
     resolve: {
         alias: {
@@ -46,7 +43,7 @@ module.exports = {
         //     title: 'output management',
         //     template: path.join(__dirname, '../src/layout/layout.html')
         // }),
-        new CleanWebpackPlugin(['dist']), // 每次打包清理dist文件夹
+        // new CleanWebpackPlugin(['dist']), // 每次打包清理dist文件夹
         // new webpack.HotModuleReplacementPlugin(), // 热加载
         // new UglifyJSPlugin() // tree shaking 不加载没有使用的模块
     ],
