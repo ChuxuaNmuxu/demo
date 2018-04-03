@@ -12,6 +12,7 @@ async function serve() {
     console.log('await run build')
     await new Promise((resolve, reject) => {
         function start() {
+            // 开一个进程，调用node server.js命令，后面参数为配置
             const server = cp.spawn(
                 'node',
                 [app],
@@ -39,7 +40,7 @@ async function serve() {
         }
         let server = start();
         if (watch) {
-        // when the server.js file changes, we will restart the server
+            // when the server.js file changes, we will restart the server
             gaze('build/server.js').then(watcher => {
                 watcher.on('changed', () => {
                     server.kill('SIGTERM');
