@@ -26,23 +26,41 @@ module.exports = merge(baseConfig, {
             },
             {
                 test: /\.s?css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: [{
-                        loader: "css-loader", // translates CSS into CommonJS
+                // use: ExtractTextPlugin.extract({
+                //     fallback: "style-loader",
+                //     use: [{
+                //         loader: "css-loader", // translates CSS into CommonJS
+                //         options: {
+                //             modules: true,
+                //             importLoaders: 1,
+                //             localIdentName: '[name]__[local]___[hash:base64:5]',
+                //             sourceMap: true
+                //         }
+                //     }, {
+                //         loader: "sass-loader" // compiles Sass to CSS
+                //     },
+                //     {
+                //         loader: 'postcss-loader'
+                //     }]
+                // })
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
                         options: {
                             modules: true,
                             importLoaders: 1,
                             localIdentName: '[name]__[local]___[hash:base64:5]',
                             sourceMap: true
                         }
-                    }, {
-                        loader: "sass-loader" // compiles Sass to CSS
                     },
                     {
                         loader: 'postcss-loader'
-                    }]
-                })
+                    },
+                    {
+                        loader: 'sass-loader'
+                    }
+                ]
             },
             {
                 test: /\.(png|jpg|gif|svg)$/,

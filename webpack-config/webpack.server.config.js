@@ -37,7 +37,9 @@ module.exports = merge(baseConfig, {
             },
             {
                 test: /\.scss$/,
-                use: ['isomorphic-style-loader',{
+                use: [
+                    'isomorphic-style-loader',
+                    {
                         loader: 'css-loader',
                         options: {
                             modules: true,
@@ -47,11 +49,11 @@ module.exports = merge(baseConfig, {
                         }
                     },
                     {
-                        loader: 'sass-loader'
+                        loader: 'postcss-loader'
                     },
                     {
-                        loader: 'postcss-loader'
-                    }
+                        loader: 'sass-loader'
+                    },
                 ]
 
                 // use: ExtractTextPlugin.extract({

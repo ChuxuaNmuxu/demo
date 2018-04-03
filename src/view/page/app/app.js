@@ -33,9 +33,9 @@ class App extends Component {
     render () {
         const {todos} = this.props;
         return (
-            <div className='app' styleName='app'>
+            <div className={styles.app}>
                 cool ! !!!!!
-                <div className="container" onClick={this._handleClick}>
+                <div className='container' onClick={this._handleClick}>
                     App demo !
                 </div>
                 <div onClick={this.handleAddTodo}>
@@ -70,4 +70,5 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToState, mapDispatchToProps)(CSSModules(App, styles));
+// export default connect(mapStateToState, mapDispatchToProps)(CSSModules(App, styles));
+export default connect(mapStateToState, mapDispatchToProps)(App);
