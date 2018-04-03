@@ -21,7 +21,8 @@ server.get('*', (req, res) => {
             <script src="client.js" />
         </body>
         </html>`);
-    });
-    server.listen(port, () => {
+});
+
+server.listen(port, () => {
     console.log(`App is listening at http://localhost:${port}/`);
 });

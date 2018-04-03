@@ -109,6 +109,7 @@ server.get('*', function (req, res) {
     var app = _server2.default.renderToString(_react2.default.createElement(_App2.default, null));
     res.send('<!doctype html>\n        <html>\n            <head>\n                <title>' + title + '</title>\n            </head>\n        <body>\n            <div id="app">' + app + '</div>\n            <script src="client.js" />\n        </body>\n        </html>');
 });
+
 server.listen(port, function () {
     console.log('App is listening at http://localhost:' + port + '/');
 });

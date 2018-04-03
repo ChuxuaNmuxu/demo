@@ -1,4 +1,5 @@
 /node_modules/
 /debug.log
 /npm-debug.log
-/dist
+/dist/
+/build/
