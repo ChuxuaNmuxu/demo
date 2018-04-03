@@ -12,7 +12,7 @@ module.exports = merge(baseConfig, {
 
     output: {
         publicPath: '/',
-        path: path.join(__dirname, '../build/public'),
+        path: path.join(__dirname, '../build'),
         filename: 'client.js'
     },
 

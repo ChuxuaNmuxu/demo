@@ -4,7 +4,6 @@ import CSSModules from 'react-css-modules';
 import {connect} from 'react-redux';
 import styles from './app.scss';
 import {addTodo} from 'src/action';
-console.log('styles: ', styles);
 
 class App extends Component {
     constructor (props) {
@@ -33,10 +32,10 @@ class App extends Component {
     render () {
         const {todos} = this.props;
         return (
-            <div className={styles.app}>
+            <div className='app' styleName='app'>
                 cool ! !!!!!
                 <div className='container' onClick={this._handleClick}>
-                    App demo !
+                    App demo  
                 </div>
                 <div onClick={this.handleAddTodo}>
                     {
@@ -70,5 +69,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-// export default connect(mapStateToState, mapDispatchToProps)(CSSModules(App, styles));
-export default connect(mapStateToState, mapDispatchToProps)(App);
+export default connect(mapStateToState, mapDispatchToProps)(CSSModules(App, styles));

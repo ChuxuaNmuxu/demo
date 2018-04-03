@@ -8,7 +8,6 @@ const layout = require('./src/view/layout/layout');
 const serverRender = require('./build/server').default;
 
 const server = express();
-console.log('server: ', server)
 server.use(express.static('build'));
 
 server.get('*', (request, response) => {

@@ -6,7 +6,7 @@ const run = require('./run');
 
 async function serve() {
     const watch = true;
-    const app = path.join(__dirname, '../build/server.js');
+    const app = path.join(__dirname, '../server.js');
     const gaze = Promise.promisify(require('gaze'));
     await run(build, { watch });
     console.log('await run build')
@@ -14,7 +14,7 @@ async function serve() {
         function start() {
             const server = cp.spawn(
                 'node',
-                [path.join(__dirname, '../build/server.js')],
+                [app],
                 {
                     env: Object.assign(
                         { NODE_ENV: 'development' },
