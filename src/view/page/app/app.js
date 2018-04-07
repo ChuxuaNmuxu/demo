@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 import {connect} from 'react-redux';
 import styles from './app.scss';
 import {addTodo} from 'src/action';
+import fetch from '../../../../core/fetch';
 
 class App extends Component {
     constructor (props) {
@@ -14,8 +15,14 @@ class App extends Component {
     componentWillMount () {
         console.log('root 生命周期 willMount 触发了！');
     }
-    componentDidMount () {
-        console.log('root 生命周期 didMount 触发了！');
+    async componentDidMount() {
+        try {
+            const response = await fetch('/api/test');
+            const data = await response.text();
+            this.setState({ data });
+        } catch (err) {
+            this.setState({ data: 'Error ' + err.message });
+        }
     }
     _handleClick () {
         alert('yf超帅的！');
@@ -33,7 +40,7 @@ class App extends Component {
         const {todos} = this.props;
         return (
             <div className='app' styleName='app'>
-                cool ! !!!!!
+                {this.state.data}
                 <div className='container' onClick={this._handleClick}>
                     App demo  
                 </div>

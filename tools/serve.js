@@ -8,8 +8,8 @@ async function serve() {
     const watch = true;
     const app = path.join(__dirname, '../server.js');
     const gaze = Promise.promisify(require('gaze'));
-    await run(build, { watch });
     console.log('await run build')
+    await run(build, { watch });
     await new Promise((resolve, reject) => {
         function start() {
             // 开一个进程，调用node server.js命令，后面参数为配置
