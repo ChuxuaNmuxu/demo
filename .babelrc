@@ -4,6 +4,10 @@
       "react"
     ],
     "plugins": [
-      "transform-runtime"
+      ["transform-runtime", {
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true }],
+      ["transform-class-properties", { "spec": true }]
     ]
   }

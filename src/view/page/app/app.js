@@ -9,6 +9,11 @@ import fetch from '../../../../core/fetch';
 class App extends Component {
     constructor (props) {
         super(props);
+
+        this.state = {
+            data: 'right !'
+        }
+
         this._handleClick = this._handleClick.bind(this);
         this.handleAddTodo = this.handleAddTodo.bind(this);
     }
@@ -18,6 +23,7 @@ class App extends Component {
     async componentDidMount() {
         try {
             const response = await fetch('/api/test');
+            console.log('response: ', response)
             const data = await response.text();
             this.setState({ data });
         } catch (err) {

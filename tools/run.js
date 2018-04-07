@@ -21,7 +21,9 @@ async function run(fn, options) {
  * module.children: 本模块require的模块
  * process.argv: node cli 执行命令的参数数组，如node index.js则两个参数
 */
-if (process.mainModule.children.length === 0 && process.argv.length > 2) {
+console.log(111, process.mainModule.children.length, process.argv.length)
+
+if (process.mainModule.children.length === 1 && process.argv.length > 2) {
     delete require.cache[__filename];
     const module = process.argv[2];
     run(require(`./${module}.js`))

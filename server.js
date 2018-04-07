@@ -38,6 +38,8 @@ server.get('*', (request, response) => {
     })
 });
 
+server.use('/api', require('./api/test.js'));
+
 // 服务器端口
 const port = 3099;
 
