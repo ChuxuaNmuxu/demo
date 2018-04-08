@@ -21,14 +21,19 @@ async function start() {
 
         const bundler = webpack(webpackConfig);
 
+
+        const clientBundler = bundler.compilers.find(x => x.name === 'client');
+        const serverBundler = bundler.compilers.find(x => x.name === 'server');
+
         const middleware = [
             staticMiddleware(path.join(__dirname, '../build')),
-            webpackDevMiddleware(bundler, {
+            webpackDevMiddleware(clientBundler, {
                 stats: webpackConfig[0].stats
             }),
-            ...bundler.compilers
-            .filter(compiler => compiler.options.target !== 'node')
-            .map(compiler => webpackHotMiddleware(compiler))
+            // ...bundler.compilers
+            // .filter(compiler => compiler.options.target !== 'node')
+            // .map(compiler => webpackHotMiddleware(clientBundler))
+            webpackHotMiddleware(clientBundler)
         ];
 
         let handleServerBundleComplete = () => {

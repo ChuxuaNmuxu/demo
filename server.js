@@ -10,12 +10,19 @@ const serverRender = require('./build/server').default;
 const server = express();
 server.use(express.static('build'));
 
+// 匹配api下的路由，路由可以有多个匹配
 server.use('/api', require('./api/test.js'));
+// 只能匹配api/test,，没用next，所以不会再匹配 *
+// server.get('/api/test', (res, req) => {
+//     console.log(2222)
+//     req.send({ message: 'Hello from REST API' });
+// })
 
-server.get('*', (request, response) => {
+server.get('*', (request, response, next) => {
     // 将请求的url传递给路由
     const context = {};
     console.log('request.url: ', request.url)
+
     serverRender({
         location: request.url,
         context
