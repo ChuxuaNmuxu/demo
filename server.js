@@ -10,6 +10,8 @@ const serverRender = require('./build/server').default;
 const server = express();
 server.use(express.static('build'));
 
+server.use('/api', require('./api/test.js'));
+
 server.get('*', (request, response) => {
     // 将请求的url传递给路由
     const context = {};
@@ -37,8 +39,6 @@ server.get('*', (request, response) => {
         }
     })
 });
-
-server.use('/api', require('./api/test.js'));
 
 // 服务器端口
 const port = 3099;

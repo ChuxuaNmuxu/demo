@@ -5,13 +5,16 @@ import {connect} from 'react-redux';
 import styles from './app.scss';
 import {addTodo} from 'src/action';
 import fetch from '../../../../core/fetch';
+import { isString } from 'util';
 
 class App extends Component {
     constructor (props) {
         super(props);
 
         this.state = {
-            data: 'right !'
+            data: {
+                message: 'right'
+            }
         }
 
         this._handleClick = this._handleClick.bind(this);
@@ -22,10 +25,13 @@ class App extends Component {
     }
     async componentDidMount() {
         try {
+            console.log('fetch: ', fetch)
             const response = await fetch('/api/test');
-            console.log('response: ', response)
             const data = await response.text();
-            this.setState({ data });
+            console.log('response: ', typeof data)
+            this.setState({ 
+                data: isString(data) ? JSON.parse(data) : data
+            });
         } catch (err) {
             this.setState({ data: 'Error ' + err.message });
         }
@@ -46,7 +52,7 @@ class App extends Component {
         const {todos} = this.props;
         return (
             <div className='app' styleName='app'>
-                {this.state.data}
+                {this.state.data.message}
                 <div className='container' onClick={this._handleClick}>
                     App demo  
                 </div>
