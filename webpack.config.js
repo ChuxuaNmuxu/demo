@@ -15,14 +15,18 @@ const entry = files.reduce((acce, filename) => {
 
 module.exports = {
     // entry,
-    entry: [
-        'webpack-dev-server/client?http://localhost:8080/',
-        path.join(__dirname, './src/entry/app.js')
-    ],
+    // entry: [
+    //     'webpack-dev-server/client?http://localhost:8080/',
+    //     path.join(__dirname, './src/entry/app.js')
+    // ],
+
+    entry: {
+        app: path.join(__dirname, './src/entry/app.js')
+    },
 
     output: {
         filename: 'app.js',
-        path: path.resolve(__dirname, './dist')
+        path: path.resolve(__dirname, 'dist')
     },
 
     devtool: 'inline-source-map', // source map

@@ -6,7 +6,7 @@ class Child extends Component {
     render() {
         return (
             <div className='child'>
-                I am only a child  
+                I am only a child  ddfadd
             </div>
         );
     }
