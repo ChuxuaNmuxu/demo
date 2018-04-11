@@ -5,7 +5,7 @@ const RUNNING_REGEXP = /Server is listening at http:\/\/(.*?)\//;
 let server;
 const webpackConfig = require('./webpack.dev.config');
 
-const { output } = webpackConfig.find(x => x.target === 'node');
+// const { output } = webpackConfig.find(x => x.target === 'node');
 
 // const serverPath = path.join(output.path, output.filename);
 const serverPath = path.join(__dirname, '../server.js');

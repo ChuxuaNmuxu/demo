@@ -4,7 +4,7 @@ import CSSModules from 'react-css-modules';
 import {connect} from 'react-redux';
 import styles from './app.scss';
 import {addTodo} from 'src/action';
-import fetch from '../../../../core/fetch';
+// import fetch from '../../../../core/fetch';
 import { isString } from 'util';
 
 class App extends Component {
@@ -24,11 +24,25 @@ class App extends Component {
         console.log('root 生命周期 willMount 触发了！');
     }
     async componentDidMount() {
+        // try {
+        //     console.log('fetch: ', fetch)
+        //     const response = await fetch('/api/test');
+        //     const data = await response.text();
+        //     console.log('response: ', typeof data)
+        //     this.setState({ 
+        //         data: isString(data) ? JSON.parse(data) : data
+        //     });
+        // } catch (err) {
+        //     this.setState({ data: 'Error ' + err.message });
+        // }
+
         try {
             console.log('fetch: ', fetch)
             const response = await fetch('/api/test');
+            const response2 = await fetch('/api/addtest', {method: 'post', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({song: 'my love'})});
             const data = await response.text();
             console.log('response: ', typeof data)
+            console.log(888,data)
             this.setState({ 
                 data: isString(data) ? JSON.parse(data) : data
             });
