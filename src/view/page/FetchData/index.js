@@ -19,6 +19,15 @@ class FetchData extends Component {
             actionType: actionTypes.FETCH_SUCCESS
         }))
 
+        await dispatch(fetchData({
+            url: 'https://dev-cjcms-api.ecaicn.com/api/user/coursewares?page=1&pageSize=10&folderId=0&keyword=',
+            actionType: actionTypes.FETCH_SUCCESS
+        }))
+
+        const data = fetch('https://segmentfault.com/api/promote/ad/1190000008394749?_=0deb961a009479420b0667013fbde2fa')
+        .then(response => response.text())
+        .then(data => console.log('data: ', data))
+
         // const response = await fetch('/api/test');
         // const data = await response.text();
         // console.log(data);

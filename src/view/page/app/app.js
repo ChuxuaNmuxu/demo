@@ -90,7 +90,7 @@ class App extends Component {
 // };
 
 const mapStateToState = state => {
-    const {todos} = state;
+    const {todos = []} = state;
     return {
         todos
     }
