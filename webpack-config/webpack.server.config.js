@@ -34,7 +34,8 @@ module.exports = merge(baseConfig, {
                         babelrc: false,
                         presets: ['react', 'env'],
                         plugins: [
-                            'transform-es2015-modules-commonjs'
+                            'transform-es2015-modules-commonjs',
+                            'transform-object-rest-spread'
                         ]
                     }
                 }

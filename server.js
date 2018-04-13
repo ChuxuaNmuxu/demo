@@ -15,15 +15,14 @@ const bodyParser = require('body-parser')
 server.use(bodyParser.json())
 server.use(bodyParser.urlencoded({extended: true}))
 
-var router = express.Router();
+const router = express.Router();
 router.get('/test', api.test)
-
 router.post('/addtest', api.addtest)
 
 server.use('/api', router)
 
 // 匹配api下的路由，路由可以有多个匹配
-// server.use('/api', require('./api/test.js'));
+// server.use('/api', require('./server/test.js'));
 // 只能匹配api/test,，没用next，所以不会再匹配 *
 // server.get('/api/test', (res, req) => {
 //     console.log(2222)

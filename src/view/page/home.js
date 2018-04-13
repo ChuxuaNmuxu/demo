@@ -1,7 +1,5 @@
 import React from 'react';
-import {Route, Link, Redirect} from 'react-router-dom';
-import App from './app';
-import About from './about';
+import {Route, Link, Redirect, Switch} from 'react-router-dom';
 import routes from '../routes';
 
 const Home = () => (
@@ -10,13 +8,17 @@ const Home = () => (
             <li><Link to="/">Home</Link></li>
             <li><Link to="/about">About</Link></li>
             <li><Link to="/previte">previte</Link></li>
+            <li><Link to="/fetchdata">fetchdata</Link></li>
         </ul>
 
     <hr/>
 
-        {
-            routes.map(({component, path}) => <Route component={component} path={path} key={path}/>)
-        }
+        <Switch>
+            {
+                routes.map(props => <Route {...props} key={props.path}/>)
+            }
+        </Switch>
+
 
         {
             // 使用exact, 否知会一直匹配'/'，导致无限重定向

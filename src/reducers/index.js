@@ -1,22 +1,10 @@
-import * as constant from '../actionType';
-import initialState from '../initialState';
+import homeReducers from './home';
+import dataReducers from './fetchData';
+import { combineReducers } from 'redux';
 
-const reducers = (state=initialState, action) => {
-    switch (action.type) {
-        case constant.ADD_TODO:
-            return Object.assign({}, state, {
-                todos: [
-                    ...state.todos,
-                    {
-                        text: action.data.text,
-                        completed: action.data.completed
-                    }
-                ]
-            })
-            break;
-        default:
-            return state;
-    }
-}
+const reducer = combineReducers({
+    homeReducers,
+    dataReducers
+})
 
-export default reducers;
+export default reducer;
