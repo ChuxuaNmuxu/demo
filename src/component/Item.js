@@ -26,7 +26,9 @@ const dragCollect = (connect, monitor) => ({
 
 const ListDropTarget = {
     drop(props, monitor, component) {
-        console.log('drop(props): ', props)
+        const {exchange, item} = props;
+        const source = monitor.getItem();
+        exchange(source.id, item.id);
     }
 }
 
