@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Board from './Board';
 
 class App extends Component {
     render() {
         return (
-            <div>
-                App demo !
-            </div>
+            <Board knightPosition={[3, 6]} />
         );
     }
 }
