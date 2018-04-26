@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Board from './Board';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
+import List from './List';
+
+@DragDropContext(HTML5Backend)
 class App extends Component {
     render() {
         return (
-            <Board knightPosition={[3, 6]} />
+            <div>
+                <List />
+            </div>
         );
     }
 }
 
-// App.propTypes = {
+App.propTypes = {
 
-// };
+};
 
 export default App;
