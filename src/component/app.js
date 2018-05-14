@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Container from './Container';
 
 class App extends Component {
     render() {
         return (
             <div>
-                App demo !
+                <Container />
             </div>
         );
     }
