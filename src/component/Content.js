@@ -1,31 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import Item from './Items';
 
 export default class Content extends Component {
-    constructor(props, context) {
-        super(props, context);
-        
-        this.state = {
-            count: 0
-        }
-    }
-    
-
-    handleClick = () => {
-        this.setState({
-            count: this.state.count + 1
-        })
-    }
+    // handleClick = () => {
+    //     this.setState({
+    //         count: this.state.count + 1
+    //     })
+    // }
 
     render() {
         console.log('content render')
+        const renderItem = () => <Item count={this.props.count} />     
 
-        return (
-            <div onClick={this.handleClick} >
-                {
-                    this.state.count
-                }
-            </div>
-        )
+        return renderItem()
     }
 }

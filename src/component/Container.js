@@ -1,17 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import Content from './Content'
+import Wrap from './Wrap'
 import CSSModules from 'react-css-modules'
-import styles from './Container.css'
+import styles from './Container.scss'
 console.log(222, styles)
 
 class Container extends Component {
+    componentWillReceiveProps (nextProps) {
+        console.log(123, nextProps)
+        console.log(124, this.props)
+    }
+
     render() {
-        console.log('container render')
+        console.log('container render', this.props)
 
         return (
             <div styleName='container'>
-                <Content />
+                <Wrap />
             </div>
         )
     }
