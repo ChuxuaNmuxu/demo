@@ -60,7 +60,12 @@ module.exports = {
                 test: /\.css$/,
                 use: [
                     'style-loader',
-                    'css-loader'
+                    {
+                        loader: "css-loader", // translates CSS into CommonJS
+                        options: {
+                            modules: true
+                        }
+                    }
                 ]
             },
             {

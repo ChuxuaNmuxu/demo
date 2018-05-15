@@ -6,10 +6,6 @@ import styles from './Container.css'
 console.log(222, styles)
 
 class Container extends Component {
-    static propTypes = {
-        prop: PropTypes
-    }
-
     render() {
         console.log('container render')
 
