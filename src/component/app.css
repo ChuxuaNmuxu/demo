@@ -1,0 +1,41 @@
+.container {
+    width: 600px;
+    height: 600px;
+    position: relative;
+    top: 50px;
+    left: 100px;
+    background: #eee;
+}
+
+.demo {
+    width: 180px;
+    height: 180px;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    background: orange;
+    transform: rotate(30deg);
+    transform-origin: center
+}
+
+.children1 {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: 100px;
+    top: 100px;
+    background: blue;
+    transform: rotate(30deg);
+    transform-origin: 90px 90px
+}
+
+.children2 {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: 200px;
+    top: 190px;
+    background: #ccc;
+    transform: rotate(30deg);
+    transform-origin: -90px -80px
+}
