@@ -8,6 +8,8 @@ export default class Component extends React.Component {
         prop: PropTypes
     }
 
+    static displayName = 'Component-test'
+
     render() {
         return (
             <div>
