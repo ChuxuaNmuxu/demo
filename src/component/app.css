@@ -6,3 +6,19 @@
 .target {
     border: 1px solid black;
 }
+
+.ground {
+    width: 600px;
+    height: 600px;
+    position: relative;
+    background: #eee;
+}
+
+.suspension {
+    width: 600px;
+    height: 600px;
+    position: absolute;
+    background: #333;
+    top: 0;
+    left: 0;
+}
