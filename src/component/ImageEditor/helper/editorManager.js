@@ -1,4 +1,5 @@
-import Graphics from './graphics'
+import Graphics from './graphics';
+import _ from 'lodash'
 
 class Manager {
     graphicsMap = {};
@@ -9,6 +10,14 @@ class Manager {
     // 注册编辑器
     registryGraphics (canvasId, options) {
         if (!canvasId) return;
+
+        options = _.merge(options, {
+            canvasOptions: {
+                maxWidth: 800,
+                minWidth: 800,
+                backgroundColor: 'red'
+            }
+        })
 
         const graphics = new Graphics(canvasId, options);
         this.graphicsMap[canvasId] = graphics;

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import image from './timg.jpg'
 
 import Shape from './Buttons/Shape'
+import Text from './Buttons/Text'
 import ImageEditor from './ImageEditor'
 const id = 'image-eiditor-canvas'
 
@@ -17,7 +18,8 @@ class App extends Component {
                     height={800}
                     position={{x: 50, y: 50}}
                 />
-                <Shape canvasId={id}/>
+                <Shape canvasId={id} />
+                <Text canvasId={id} />
             </React.Fragment>
         );
     }
