@@ -5,6 +5,7 @@ export default class ComponentStack {
     current = null;
     futureStack = [];
     pastStack = []
+    id = 0
 
     constructor () {}
 
@@ -12,7 +13,12 @@ export default class ComponentStack {
         return this.components[id]
     }
 
-    registryComponent (id, component) {
+    getNewId () {
+        return `$componenet-${this.id++}`
+    }
+
+    registryComponent (component, id) {
+        id = id || this.getNewId();
         this.components[id] = component;
         this.pastStackAdd(id)
     }
@@ -34,8 +40,7 @@ export default class ComponentStack {
     }
 
     stackPop (id) {
-        const id = this.componentStack.pop();
-        return id;
+        return this.componentStack.pop();
     }
 
     undo () {

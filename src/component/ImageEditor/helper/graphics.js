@@ -4,13 +4,14 @@ import snippet from 'tui-code-snippet';
 import _ from 'lodash';
 
 import * as components from './components'
-import * as contants from './consts';
+import consts from './consts';
 import * as Components from './components';
 import Image from './components/Image';
-import util from './utils/util'
+import util from './utils/util';
+import ComponentStack from './ComponentStack';
 
 const {extend, stamp, isArray, isString, forEachArray, forEachOwnProperties, CustomEvents} = snippet;
-const drawingModes = contants.drawingModes;
+const drawingModes = consts.drawingModes;
 
 const DEFAULT_CSS_MAX_WIDTH = 1000;
 const DEFAULT_CSS_MAX_HEIGHT = 800;
@@ -25,7 +26,7 @@ const backstoreOnly = {
 class Graphics {
     _canvas;
     _drawingMode = drawingModes.NORMAL;
-    drawingMode = contants.drawingModes.NORMAL;
+    drawingMode = drawingModes.NORMAL;
     _componentModules = {};
 
     constructor (elementId, options) {
@@ -37,6 +38,7 @@ class Graphics {
 
         this.initFabric(elementId, canvasOptions);
         this.registryComponentModule();
+        this.componentStack = new ComponentStack();
 
         if (image) this.initImage(image)
         // 试验

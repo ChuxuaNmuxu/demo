@@ -1,6 +1,6 @@
 import util from './utils/util';
 
-module.exports = {
+export default {
     /**
      * Component names
      * @type {Object.<string, string>}
@@ -10,12 +10,13 @@ module.exports = {
         'CROPPER',
         'FLIP',
         'ROTATION',
-        'FREE_DRAWING',
+        'FREEDRAW',
         'LINE',
         'TEXT',
         'ICON',
         'FILTER',
-        'SHAPE'
+        'SHAPE',
+        'ARROW',
     ),
 
     /**
@@ -77,10 +78,11 @@ module.exports = {
     drawingModes: util.keyMirror(
         'NORMAL',
         'CROPPER',
-        'FREE_DRAWING',
+        'FREEDRAW',
         'LINE_DRAWING',
         'TEXT',
-        'SHAPE'
+        'SHAPE',
+        'ARROW'
     ),
 
     /**

@@ -3,8 +3,7 @@ import PropTypes from 'prop-types'
 import {graphicsToolBar} from '../ImageEditor';
 
 @graphicsToolBar({
-    mode: 'shape',
-    type: 'rect'
+    mode: 'arrow'
 })
 export default class Shape extends Component {
     static propTypes = {
@@ -18,7 +17,7 @@ export default class Shape extends Component {
 
     render() {
         return (
-            <botton onClick={this.handleStart}>add rect </botton>
+            <botton onClick={this.handleStart}>add arrow </botton>
         )
     }
 }

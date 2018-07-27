@@ -1,6 +1,6 @@
 import {fabric} from 'fabric'
 import Component from '../interface/component';
-import * as consts from '../consts';
+import consts from '../consts';
 import resizeHelper from '../utils/shapeResizeHelper';
 import _ from 'lodash'
 
@@ -358,12 +358,13 @@ export default class Shape extends Component {
      * MouseUp event handler on canvas
      * @private
      */
-    _onFabricMouseUp() {
+    _onFabricMouseUp () {
         const canvas = this.getCanvas();
         const shape = this._shapeObj;
 
         if (shape) {
             resizeHelper.adjustOriginToCenter(shape);
+            this.graphics.componentStack.registryComponent(shape);
         }
 
         this.fire(eventNames.ADD_OBJECT_AFTER, this.graphics.createObjectProperties(shape));

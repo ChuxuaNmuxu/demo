@@ -17,7 +17,7 @@ export default class Shape extends Component {
 
     render() {
         return (
-            <botton onClick={this.handleStart}>add text</botton>
+            <botton onClick={this.handleStart}>add text </botton>
         )
     }
 }

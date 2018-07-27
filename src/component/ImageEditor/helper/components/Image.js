@@ -41,6 +41,7 @@ export default class ImageLoader extends Component {
                 // this.setCanvasImage(img, image);
                 // this.adjustCanvasDimension();
                 resolve(image)
+                this.graphics.componentStack.registryComponent(image);
             }
             imgElement.onError = () => {
                 reject(new Error('image load failed'))

@@ -4,6 +4,8 @@ import image from './timg.jpg'
 
 import Shape from './Buttons/Shape'
 import Text from './Buttons/Text'
+import Arrow from './Buttons/Arrow'
+import FreeDraw from './Buttons/FreeDraw'
 import ImageEditor from './ImageEditor'
 const id = 'image-eiditor-canvas'
 
@@ -20,6 +22,8 @@ class App extends Component {
                 />
                 <Shape canvasId={id} />
                 <Text canvasId={id} />
+                <Arrow canvasId={id} />
+                <FreeDraw canvasId={id} />
             </React.Fragment>
         );
     }

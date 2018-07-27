@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import hoistNonReactStatics from 'hoist-non-react-statics'
 import editorManager from '../helper/editorManager';
-import {drawingModes} from '../helper/consts';
+import consts from '../helper/consts';
 import invariant from 'invariant';
 import _ from 'lodash';
+
+const {drawingModes} = consts; 
 
 export default (options) => DecoratedComponent => {
     const {
@@ -14,6 +16,8 @@ export default (options) => DecoratedComponent => {
 
     const mode = options.mode ? options.mode.toUpperCase() : drawingModes.NORMAL;
     
+    console.log('draw', _.values(drawingModes))
+
     invariant(
         _.includes(_.values(drawingModes), mode),
         '%s is not support',
