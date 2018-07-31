@@ -36,7 +36,8 @@ export default class ImageLoader extends Component {
         return new Promise((resolve, reject) => {
             imgElement.onload = () => {
                 const image = new fabric.Image(imgElement, options)
-                this.getCanvas().add(image);
+                // this.getCanvas().add(image);
+                this.add(image, options);
 
                 // this.setCanvasImage(img, image);
                 // this.adjustCanvasDimension();
@@ -47,5 +48,14 @@ export default class ImageLoader extends Component {
                 reject(new Error('image load failed'))
             }
         })
+    }
+
+    add (image, options) {
+        this.getCanvas().add(image, options)
+    }
+
+    setBackground (imgUrl, options) {
+        const canvas = this.getCanvas();
+        canvas.setBackgroundImage(imgUrl, canvas.renderAll.bind(canvas))
     }
 }

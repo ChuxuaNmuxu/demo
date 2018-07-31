@@ -6,6 +6,7 @@ import Shape from './Buttons/Shape'
 import Text from './Buttons/Text'
 import Arrow from './Buttons/Arrow'
 import FreeDraw from './Buttons/FreeDraw'
+import Undo from './Buttons/Undo'
 import ImageEditor from './ImageEditor'
 const id = 'image-eiditor-canvas'
 
@@ -24,6 +25,7 @@ class App extends Component {
                 <Text canvasId={id} />
                 <Arrow canvasId={id} />
                 <FreeDraw canvasId={id} />
+                <Undo canvasId={id} />
             </React.Fragment>
         );
     }

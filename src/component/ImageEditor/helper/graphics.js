@@ -9,12 +9,10 @@ import * as Components from './components';
 import Image from './components/Image';
 import util from './utils/util';
 import ComponentStack from './ComponentStack';
+import uuid from 'uuid'
 
 const {extend, stamp, isArray, isString, forEachArray, forEachOwnProperties, CustomEvents} = snippet;
 const drawingModes = consts.drawingModes;
-
-const DEFAULT_CSS_MAX_WIDTH = 1000;
-const DEFAULT_CSS_MAX_HEIGHT = 800;
 
 const cssOnly = {
     cssOnly: true
@@ -48,7 +46,8 @@ class Graphics {
     initImage (image, options) {
         const imageComponent = new Image(this);
 
-        imageComponent.load(image, options);
+        // imageComponent.load(image, options);
+        imageComponent.setBackground(image)
         // 配置
     }
 
@@ -75,7 +74,7 @@ class Graphics {
      * @returns {boolean} true if success or false
      */
     startDrawingMode (mode, option) {
-        if (this._isSameDrawingMode(mode)) {
+        if (this.getDrawingMode() !== 'UNDO' && this._isSameDrawingMode(mode)) {
             return true;
         }
 
@@ -156,7 +155,7 @@ class Graphics {
             'opacity'
         ];
         const props = {
-            id: stamp(obj),
+            id: uuid.v4(),
             type: obj.type
         };
 
@@ -978,7 +977,7 @@ class Graphics {
             'opacity'
         ];
         const props = {
-            id: stamp(obj),
+            id: uuid.v4(),
             type: obj.type
         };
 

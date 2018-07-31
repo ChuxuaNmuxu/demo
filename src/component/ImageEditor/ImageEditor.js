@@ -22,15 +22,15 @@ class ImageEditor extends Component {
 
     componentDidMount() {
         const {image, position, id} = this.props;
-        console.log(25, id);
         // TODO: init fabric
         const editor = editorManager.registryGraphics(id, {
+            // 图片地址
             image,
+            // 图片的位置
             position
         });
     }
     
-
     render() {
         const {width, height, id} = this.props;
         return (

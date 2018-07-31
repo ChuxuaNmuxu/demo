@@ -7,6 +7,7 @@ export default class Undo extends Component {
     }
 
     start () {
-        this.graphics.componentStack.undo()
+        const component = this.graphics.componentStack.undo();
+        component && component.remove()
     }
 }

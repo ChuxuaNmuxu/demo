@@ -17,6 +17,7 @@ export default {
         'FILTER',
         'SHAPE',
         'ARROW',
+        'UNDO'
     ),
 
     /**
@@ -82,7 +83,8 @@ export default {
         'LINE_DRAWING',
         'TEXT',
         'SHAPE',
-        'ARROW'
+        'ARROW',
+        'UNDO'
     ),
 
     /**

@@ -35,6 +35,20 @@ class FreeDrawing extends Component {
 
         canvas.isDrawingMode = true;
         this.setBrush(setting);
+
+        canvas.on('path:created', ({path}) => {
+            path.set({
+                lockMovementX: true,
+                lockMovementY: true
+            });
+            path.hasBorders = false;
+            path.hasControls = false;
+            path.sendToBack();
+            this.registry(path)
+
+            canvas.deactivateAll()
+            path.selectable = false;
+        })
     }
 
     /**

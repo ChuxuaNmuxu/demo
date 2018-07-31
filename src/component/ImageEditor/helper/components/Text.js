@@ -6,41 +6,13 @@ import {fabric} from 'fabric';
 import snippet from 'tui-code-snippet';
 import Component from '../interface/component';
 import consts from '../consts';
-import util from '../utils/util';
-
-const events = consts.eventNames;
 
 const defaultStyles = {
     fill: '#000000',
     left: 0,
-    top: 0
+    top: 0,
+    zIndex: 99
 };
-const resetStyles = {
-    fill: '#000000',
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    textDecoraiton: ''
-};
-const {browser} = snippet;
-
-const TEXTAREA_CLASSNAME = 'tui-image-eidtor-textarea';
-const TEXTAREA_STYLES = util.makeStyleText({
-    position: 'absolute',
-    padding: 0,
-    display: 'none',
-    border: '1px dotted red',
-    overflow: 'hidden',
-    resize: 'none',
-    outline: 'none',
-    'border-radius': 0,
-    'background-color': 'transparent',
-    '-webkit-appearance': 'none',
-    'z-index': 9999,
-    'white-space': 'pre'
-});
-const EXTRA_PIXEL_LINEHEIGHT = 0.1;
-const DBCLICK_TIME = 500;
 
 /**
  * Text
@@ -60,70 +32,10 @@ export default class Text extends Component {
         this._defaultStyles = defaultStyles;
 
         /**
-         * Selected state
-         * @type {boolean}
-         */
-        this._isSelected = false;
-
-        /**
-         * Selected text object
-         * @type {Object}
-         */
-        this._selectedObj = {};
-
-        /**
-         * Editing text object
-         * @type {Object}
-         */
-        this._editingObj = {};
-
-        /**
-         * Listeners for fabric event
-         * @type {Object}
-         */
-        this._listeners = {
-            mousedown: this._onFabricMouseDown.bind(this),
-            select: this._onFabricSelect.bind(this),
-            selectClear: this._onFabricSelectClear.bind(this),
-            scaling: this._onFabricScaling.bind(this)
-        };
-
-        /**
-         * Textarea element for editing
-         * @type {HTMLElement}
-         */
-        this._textarea = null;
-
-        /**
-         * Ratio of current canvas
-         * @type {number}
-         */
-        this._ratio = 1;
-
-        /**
-         * Last click time
-         * @type {Date}
-         */
-        this._lastClickTime = (new Date()).getTime();
-
-        /**
-         * Text object infos before editing
-         * @type {Object}
-         */
-        this._editingObjInfos = {};
-
-        /**
          * Previous state of editing
          * @type {boolean}
          */
         this.isPrevEditing = false;
-
-        /**
-         * use itext
-         * @type {boolean}
-         */
-        // this.useItext = graphics.useItext;
-        this.useItext = true;
     }
 
     /**
@@ -134,67 +46,40 @@ export default class Text extends Component {
 
         canvas.selection = false;
         canvas.defaultCursor = 'text';
-        canvas.on({
-            'mouse:down': this._listeners.mousedown,
-            'object:selected': this._listeners.select,
-            'before:selection:cleared': this._listeners.selectClear,
-            'object:scaling': this._listeners.scaling,
-            'text:editing': this._listeners.modify
+
+        canvas.forEachObject(obj => {
+            if (this.isText(obj)) {
+                obj.selectable = true;
+            }
         });
 
-        if (this.useItext) {
-            canvas.forEachObject(obj => {
-                if (obj.type === 'i-text') {
-                    obj.set({
-                        left: obj.left - (obj.width / 2),
-                        top: obj.top - (obj.height / 2),
-                        originX: 'left',
-                        originY: 'top'
-                    });
-                }
-            });
-        } else {
-            this._createTextarea();
-        }
-
-        this.setCanvasRatio();
+        canvas.on({
+            'mouse:down': this._onFabricMouseDown
+        });
     }
 
     /**
      * End input text mode
      */
-    end() {
+    end () {
         const canvas = this.getCanvas();
 
         canvas.selection = true;
         canvas.defaultCursor = 'default';
+        this.isPrevEditing = false;
 
-        if (this.useItext) {
-            canvas.forEachObject(obj => {
-                if (obj.type === 'i-text') {
-                    if (obj.text === '') {
-                        obj.remove();
-                    } else {
-                        obj.set({
-                            left: obj.left + (obj.width / 2),
-                            top: obj.top + (obj.height / 2),
-                            originX: 'center',
-                            originY: 'center'
-                        });
-                    }
+        canvas.forEachObject(obj => {
+            if (this.isText(obj)) {
+                if (obj.text === '') {
+                    obj.remove();
+                } else {
+                    obj.selectable = false;
                 }
-            });
-        } else {
-            canvas.deactivateAllWithDispatch();
-            this._removeTextarea();
-        }
+            }
+        });
 
         canvas.off({
-            'mouse:down': this._listeners.mousedown,
-            'object:selected': this._listeners.select,
-            'before:selection:cleared': this._listeners.selectClear,
-            'object:scaling': this._listeners.scaling,
-            'text:editing': this._listeners.modify
+            'mouse:down': this._onFabricMouseDown
         });
     }
 
@@ -213,7 +98,7 @@ export default class Text extends Component {
      *     @param {{x: number, y: number}} [options.position] - Initial position
      * @returns {Promise}
      */
-    add(text, options) {
+    add (text, options) {
         return new Promise(resolve => {
             const canvas = this.getCanvas();
             let newText = null;
@@ -226,129 +111,24 @@ export default class Text extends Component {
                 styles = snippet.extend(styles, options.styles);
             }
 
-            if (this.useItext) {
-                newText = new fabric.IText(text, styles);
-                selectionStyle = snippet.extend({}, selectionStyle, {
-                    originX: 'left',
-                    originY: 'top'
-                });
-            } else {
-                newText = new fabric.Text(text, styles);
-            }
-
-            newText.set(selectionStyle);
-            newText.on({
-                mouseup: this._onFabricMouseUp.bind(this)
+            newText = new fabric.IText(text, styles);
+            selectionStyle = snippet.extend({}, selectionStyle, {
+                originX: 'left',
+                originY: 'top'
             });
 
+            newText.set(selectionStyle);
+            newText.hasControls = false;
+                
             canvas.add(newText);
+            canvas.setActiveObject(newText);
+            newText.bringToFront();
 
-            if (!canvas.getActiveObject()) {
-                canvas.setActiveObject(newText);
-            }
+            this.registry(newText)
 
             this.isPrevEditing = true;
             resolve(this.graphics.createObjectProperties(newText));
         });
-    }
-
-    /**
-     * Change text of activate object on canvas image
-     * @param {Object} activeObj - Current selected text object
-     * @param {string} text - Changed text
-     * @returns {Promise}
-     */
-    change(activeObj, text) {
-        return new Promise(resolve => {
-            activeObj.set('text', text);
-
-            this.getCanvas().renderAll();
-            resolve();
-        });
-    }
-
-    /**
-     * Set style
-     * @param {Object} activeObj - Current selected text object
-     * @param {Object} styleObj - Initial styles
-     *     @param {string} [styleObj.fill] Color
-     *     @param {string} [styleObj.fontFamily] Font type for text
-     *     @param {number} [styleObj.fontSize] Size
-     *     @param {string} [styleObj.fontStyle] Type of inclination (normal / italic)
-     *     @param {string} [styleObj.fontWeight] Type of thicker or thinner looking (normal / bold)
-     *     @param {string} [styleObj.textAlign] Type of text align (left / center / right)
-     *     @param {string} [styleObj.textDecoraiton] Type of line (underline / line-throgh / overline)
-     * @returns {Promise}
-     */
-    setStyle(activeObj, styleObj) {
-        return new Promise(resolve => {
-            snippet.forEach(styleObj, (val, key) => {
-                if (activeObj[key] === val) {
-                    styleObj[key] = resetStyles[key] || '';
-                }
-            }, this);
-
-            activeObj.set(styleObj);
-
-            this.getCanvas().renderAll();
-            resolve();
-        });
-    } 
-
-    /**
-     * Get the text
-     * @param {Object} activeObj - Current selected text object
-     * @returns {String} text
-     */
-    getText(activeObj) {
-        return activeObj.getText();
-    }
-
-    /**
-     * Set infos of the current selected object
-     * @param {fabric.Text} obj - Current selected text object
-     * @param {boolean} state - State of selecting
-     */
-    setSelectedInfo(obj, state) {
-        this._selectedObj = obj;
-        this._isSelected = state;
-    }
-
-    /**
-     * Whether object is selected or not
-     * @returns {boolean} State of selecting
-     */
-    isSelected() {
-        return this._isSelected;
-    }
-
-    /**
-     * Get current selected text object
-     * @returns {fabric.Text} Current selected text object
-     */
-    getSelectedObj() {
-        return this._selectedObj;
-    }
-
-    /**
-     * Set ratio value of canvas
-     */
-    setCanvasRatio() {
-        const canvasElement = this.getCanvasElement();
-        const cssWidth = parseInt(canvasElement.style.maxWidth, 10);
-        const originWidth = canvasElement.width;
-        const ratio = originWidth / cssWidth;
-
-        this._ratio = ratio;
-    }
-
-    /**
-     * Get ratio value of canvas
-     * @returns {number} Ratio value
-     */
-    getCanvasRatio() {
-        // return this._ratio;
-        return 1;
     }
 
     /**
@@ -364,189 +144,16 @@ export default class Text extends Component {
     }
 
     /**
-     * Create textarea element on canvas container
-     * @private
-     */
-    _createTextarea() {
-        const container = this.getCanvasElement().parentNode;
-        const textarea = document.createElement('textarea');
-
-        textarea.className = TEXTAREA_CLASSNAME;
-        textarea.setAttribute('style', TEXTAREA_STYLES);
-        textarea.setAttribute('wrap', 'off');
-
-        container.appendChild(textarea);
-
-        this._textarea = textarea;
-
-        this._listeners = snippet.extend(this._listeners, {
-            input: this._onInput.bind(this),
-            keydown: this._onKeyDown.bind(this),
-            blur: this._onBlur.bind(this),
-            scroll: this._onScroll.bind(this)
-        });
-
-        if (browser.msie && browser.version === 9) {
-            fabric.util.addListener(textarea, 'keydown', this._listeners.keydown);
-        } else {
-            fabric.util.addListener(textarea, 'input', this._listeners.input);
-        }
-        // fabric.util.addListener(textarea, 'blur', this._listeners.blur);
-        fabric.util.addListener(textarea, 'scroll', this._listeners.scroll);
-    }
-
-    /**
-     * Remove textarea element on canvas container
-     * @private
-     */
-    _removeTextarea() {
-        const container = this.getCanvasElement().parentNode;
-        const textarea = container.querySelector('textarea');
-
-        container.removeChild(textarea);
-
-        this._textarea = null;
-
-        if (browser.msie && browser.version < 10) {
-            fabric.util.removeListener(textarea, 'keydown', this._listeners.keydown);
-        } else {
-            fabric.util.removeListener(textarea, 'input', this._listeners.input);
-        }
-        fabric.util.removeListener(textarea, 'blur', this._listeners.blur);
-        fabric.util.removeListener(textarea, 'scroll', this._listeners.scroll);
-    }
-
-    /**
-     * Input event handler
-     * @private
-     */
-    _onInput() {
-        const ratio = this.getCanvasRatio();
-        const obj = this._editingObj;
-        const textareaStyle = this._textarea.style;
-
-        textareaStyle.width = `${Math.ceil(obj.get('width') / ratio)}px`;
-        textareaStyle.height = `${Math.ceil(obj.get('height') / ratio)}px`;
-    }
-
-    /**
-     * Keydown event handler
-     * @private
-     */
-    _onKeyDown() {
-        const ratio = this.getCanvasRatio();
-        const obj = this._editingObj;
-        const textareaStyle = this._textarea.style;
-
-        setTimeout(() => {
-            obj.setText(this._textarea.value);
-
-            textareaStyle.width = `${Math.ceil(obj.getWidth() / ratio)}px`;
-            textareaStyle.height = `${Math.ceil(obj.getHeight() / ratio)}px`;
-        }, 0);
-    }
-
-    /**
-     * Blur event handler
-     * @private
-     */
-    _onBlur() {
-        const ratio = this.getCanvasRatio();
-        const editingObj = this._editingObj;
-        const editingObjInfos = this._editingObjInfos;
-        const textContent = this._textarea.value;
-        let transWidth = (editingObj.get('width') / ratio) - (editingObjInfos.width / ratio);
-        let transHeight = (editingObj.get('height') / ratio) - (editingObjInfos.height / ratio);
-
-        if (ratio === 1) {
-            transWidth /= 2;
-            transHeight /= 2;
-        }
-
-        this._textarea.style.display = 'none';
-
-        editingObj.set({
-            left: editingObjInfos.left + transWidth,
-            top: editingObjInfos.top + transHeight
-        });
-
-        if (textContent.length) {
-            this.getCanvas().add(editingObj);
-
-            const params = {
-                id: snippet.stamp(editingObj),
-                type: editingObj.type,
-                text: textContent
-            };
-
-            // this.fire(events.TEXT_CHANGED, params);
-            this.change(editingObj, text)
-        }
-    }
-
-    /**
-     * Scroll event handler
-     * @private
-     */
-    _onScroll() {
-        this._textarea.scrollLeft = 0;
-        this._textarea.scrollTop = 0;
-    }
-
-    /**
-     * Fabric scaling event handler
-     * @param {fabric.Event} fEvent - Current scaling event on selected object
-     * @private
-     */
-    _onFabricScaling(fEvent) {
-        const obj = fEvent.target;
-        const scalingSize = obj.getFontSize() * obj.getScaleY();
-
-        obj.setFontSize(scalingSize);
-        obj.setScaleX(1);
-        obj.setScaleY(1);
-    }
-
-    /**
-     * onSelectClear handler in fabric canvas
-     * @param {{target: fabric.Object, e: MouseEvent}} fEvent - Fabric event
-     * @private
-     */
-    _onFabricSelectClear(fEvent) {
-        const obj = this.getSelectedObj();
-
-        this.isPrevEditing = true;
-
-        this.setSelectedInfo(fEvent.target, false);
-
-        if (obj) {
-            // obj is empty object at initial time, will be set fabric object
-            if (obj.text === '') {
-                obj.remove();
-            }
-        }
-    }
-
-    /**
-     * onSelect handler in fabric canvas
-     * @param {{target: fabric.Object, e: MouseEvent}} fEvent - Fabric event
-     * @private
-     */
-    _onFabricSelect(fEvent) {
-        this.isPrevEditing = true;
-
-        this.setSelectedInfo(fEvent.target, true);
-    }
-
-    /**
      * Fabric 'mousedown' event handler
      * @param {fabric.Event} fEvent - Current mousedown event on selected object
      * @private
      */
-    _onFabricMouseDown(fEvent) {
+    _onFabricMouseDown = (fEvent) => {
+        console.log('text mousedown')
         const obj = fEvent.target;
 
-        if (obj && !obj.isType('text')) {
+        if (obj && this.isText(obj)) {
+            this.isPrevEditing = true;
             return;
         }
 
@@ -565,96 +172,12 @@ export default class Text extends Component {
      * @private
      */
     _fireAddText(fEvent) {
-        const obj = fEvent.target;
+        // const obj = fEvent.target;
         const e = fEvent.e || {};
         const originPointer = this.getCanvas().getPointer(e);
 
-        if (!obj) {
-            this.add('double click', {
-                position: originPointer
-            })
-            // this.fire(events.ADD_TEXT, {
-            //     originPosition: {
-            //         x: originPointer.x,
-            //         y: originPointer.y
-            //     },
-            //     clientPosition: {
-            //         x: e.clientX || 0,
-            //         y: e.clientY || 0
-            //     }
-            // });
-        }
-    }
-
-    /**
-     * Fabric mouseup event handler
-     * @param {fabric.Event} fEvent - Current mousedown event on selected object
-     * @private
-     */
-    _onFabricMouseUp(fEvent) {
-        const newClickTime = (new Date()).getTime();
-
-        if (this._isDoubleClick(newClickTime)) {
-            if (!this.useItext) {
-                this._changeToEditingMode(fEvent.target);
-            }
-            this.fire(events.TEXT_EDITING); // fire editing text event
-        }
-
-        this._lastClickTime = newClickTime;
-    }
-
-    /**
-     * Get state of firing double click event
-     * @param {Date} newClickTime - Current clicked time
-     * @returns {boolean} Whether double clicked or not
-     * @private
-     */
-    _isDoubleClick(newClickTime) {
-        return (newClickTime - this._lastClickTime < DBCLICK_TIME);
-    }
-
-    /**
-     * Change state of text object for editing
-     * @param {fabric.Text} obj - Text object fired event
-     * @private
-     */
-    _changeToEditingMode(obj) {
-        const ratio = this.getCanvasRatio();
-        const textareaStyle = this._textarea.style;
-
-        this.isPrevEditing = true;
-
-        obj.remove();
-        // this.getCanvas().remove(obj)
-        // this.change(obj, '');
-
-        this._editingObj = obj;
-        this._textarea.value = obj.get('text');
-
-        this._editingObjInfos = {
-            left: this._editingObj.get('left'),
-            top: this._editingObj.get('top'),
-            width: this._editingObj.get('width'),
-            height: this._editingObj.get('height')
-        };
-
-        textareaStyle.display = 'block';
-        textareaStyle.left = `${obj.oCoords.tl.x / ratio}px`;
-        textareaStyle.top = `${obj.oCoords.tl.y / ratio}px`;
-        textareaStyle.width = `${Math.ceil(obj.get('width') / ratio)}px`;
-        textareaStyle.height = `${Math.ceil(obj.get('height') / ratio)}px`;
-        textareaStyle.transform = `rotate(${obj.get('angle')}deg)`;
-        textareaStyle.color = obj.get('fill');
-
-        textareaStyle['font-size'] = `${obj.get('fontSize') / ratio}px`;
-        textareaStyle['font-family'] = obj.get('fontFamily');
-        textareaStyle['font-style'] = obj.get('fontStyle');
-        textareaStyle['font-weight'] = obj.get('fontWeight');
-        textareaStyle['text-align'] = obj.get('textAlign');
-        textareaStyle['line-height'] = obj.get('lineHeight') + EXTRA_PIXEL_LINEHEIGHT;
-        textareaStyle['transform-origin'] = 'left top';
-
-        this._textarea.focus();
+        this.add('double click', {
+            position: originPointer
+        })
     }
 }

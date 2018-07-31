@@ -46,7 +46,7 @@ export default class ComponentStack {
     undo () {
         const id = this.pastStack.pop();
         this.futureStack.push(id);
-        this.current = _.tail(this.pastStack);
+        this.current = _.last(this.pastStack);
 
         return this.getComponent(id);
     }

@@ -11,7 +11,7 @@ const {drawingModes} = consts;
 export default (options) => DecoratedComponent => {
     const {
         canvasId,
-        options: modeOptions
+        ...canvasOptions
     } = options;
 
     const mode = options.mode ? options.mode.toUpperCase() : drawingModes.NORMAL;
@@ -46,7 +46,7 @@ export default (options) => DecoratedComponent => {
         }
 
         handleStart = () => {
-            this.graphics.startDrawingMode(mode, modeOptions);
+            this.graphics.startDrawingMode(mode, canvasOptions);
 
             const {handleStart} = this.props;
             handleStart && handleStart();

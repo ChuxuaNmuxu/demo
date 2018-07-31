@@ -17,7 +17,13 @@ export default class Arrow extends Component {
     }
 
     start() {
+        this._isSelected = false;
+
         const canvas = this.getCanvas();
+
+        canvas.defaultCursor = 'crosshair';
+        canvas.selection = false;
+        canvas.uniScaleTransform = true;
 
         canvas.on({
             'mouse:down': this.fabricMouseDown
@@ -34,25 +40,22 @@ export default class Arrow extends Component {
         canvas.selection = true;
         canvas.uniScaleTransform = false;
         canvas.off({
-            'mouse:down': this._handlers.mousedown
+            'mouse:down': this.fabricMouseDown
         });
 
-        fabric.util.removeListener(document, 'keydown', this._handlers.keydown);
-        fabric.util.removeListener(document, 'keyup', this._handlers.keyup);
+        // fabric.util.removeListener(document, 'keydown', this._handlers.keydown);
+        // fabric.util.removeListener(document, 'keyup', this._handlers.keyup);
     }
 
     fabricMouseDown = (fEvent) => {
-        const target = fEvent.target;
+        if (!this.shouldMouseDown(fEvent.target)) return;
+        const canvas = this.getCanvas();
+        this.startPoint = canvas.getPointer(fEvent.e);
 
-        if (!target) {
-            const canvas = this.getCanvas();
-            this.startPoint = canvas.getPointer(fEvent.e);
-
-            canvas.on({
-                'mouse:move': this.fabricMouseMove,
-                'mouse:up': this.fabricMouseUp
-            });
-        }
+        canvas.on({
+            'mouse:move': this.fabricMouseMove,
+            'mouse:up': this.fabricMouseUp
+        });
     }
 
     fabricMouseMove = (fEvent) => {
@@ -74,7 +77,10 @@ export default class Arrow extends Component {
 
         if (shape) {
             // resizeHelper.adjustOriginToCenter(shape);
-            this.graphics.componentStack.registryComponent(shape);
+            this.registry(shape)
+
+            canvas.deactivateAll()
+            shape.selectable = false;
         }
 
         // this.fire(eventNames.ADD_OBJECT_AFTER, this.graphics.createObjectProperties(shape));
@@ -83,6 +89,9 @@ export default class Arrow extends Component {
             'mouse:move': this.fabricMouseMove,
             'mouse:up': this.fabricMouseUp
         });
+
+        shape.hasBorders = false;
+        shape.hasControls = false;
 
         this._shapeObj = null;
     }
@@ -101,9 +110,17 @@ export default class Arrow extends Component {
          L ${this.polygonVertex[10]} ${this.polygonVertex[11]}
          z`
 
-        const pathObject = new fabric.Path(path);
+        const pathObject = new fabric.Path(path, {
+            lockMovementX: true,
+            lockMovementY: true
+        });
+
+        pathObject.hasBorders = false;
+        pathObject.hasControls = false;
 
         canvas.add(pathObject);
+        
+        pathObject.sendToBack()
         this._shapeObj = pathObject
     }
 

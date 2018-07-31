@@ -119,4 +119,27 @@ export default class Component {
     adjustCanvasDimension() {
         this.graphics.adjustCanvasDimension();
     }
+
+    isText (obj) {
+        if (!obj) return false;
+        return obj.type === 'text' || obj.type === 'i-text'
+    }
+
+    shouldMouseDown (obj) {
+        // return !obj || !this.isText(obj)
+        return true
+    }
+
+    getStack () {
+        return this.graphics.componentStack
+    }
+
+    registry (component) {
+        this.getStack().registryComponent(component);
+        console.log(this.getStack().pastStack)
+    }
+
+    unRegistry () {
+        this.getStack().stackPop;
+    }
 }
