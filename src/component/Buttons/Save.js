@@ -1,25 +1,22 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {graphicsToolBar} from '../ImageEditor';
+import editorManager from '../ImageEditor/helper/editorManager';
 
-@graphicsToolBar({
-    mode: 'shape',
-    type: 'rect',
-    stroke: 'red'
-})
+
 export default class Shape extends Component {
     static propTypes = {
         handleStart: PropTypes.func
     }
 
     handleStart = () => {
-        const {handleStart} = this.props;
-        handleStart && handleStart()
+        const {canvasId} = this.props;
+        const canvas = editorManager.save(canvasId);
+        console.log(canvas)
     }
 
     render() {
         return (
-            <botton onClick={this.handleStart}>add rect </botton>
+            <botton onClick={this.handleStart}> save </botton>
         )
     }
 }

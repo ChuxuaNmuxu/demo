@@ -7,12 +7,14 @@ import snippet from 'tui-code-snippet';
 import Component from '../interface/component';
 import consts from '../consts';
 
-const defaultStyles = {
+const defaultOptions = {
     fill: '#000000',
     left: 0,
     top: 0,
-    zIndex: 99
+    width: 500
 };
+
+const defaultText = 'default text'
 
 /**
  * Text
@@ -22,14 +24,10 @@ const defaultStyles = {
  * @ignore
  */
 export default class Text extends Component {
+    _options = defaultOptions
+
     constructor(graphics) {
         super(consts.componentNames.TEXT, graphics);
-
-        /**
-         * Default text style
-         * @type {Object}
-         */
-        this._defaultStyles = defaultStyles;
 
         /**
          * Previous state of editing
@@ -41,14 +39,14 @@ export default class Text extends Component {
     /**
      * Start input text mode
      */
-    start() {
+    start(options) {
+        this.beforeStart(options)
         const canvas = this.getCanvas();
 
-        canvas.selection = false;
         canvas.defaultCursor = 'text';
 
         canvas.forEachObject(obj => {
-            if (this.isText(obj)) {
+            if (this.graphics.isText(obj)) {
                 obj.selectable = true;
             }
         });
@@ -64,12 +62,11 @@ export default class Text extends Component {
     end () {
         const canvas = this.getCanvas();
 
-        canvas.selection = true;
         canvas.defaultCursor = 'default';
         this.isPrevEditing = false;
 
         canvas.forEachObject(obj => {
-            if (this.isText(obj)) {
+            if (this.graphics.isText(obj)) {
                 if (obj.text === '') {
                     obj.remove();
                 } else {
@@ -98,24 +95,22 @@ export default class Text extends Component {
      *     @param {{x: number, y: number}} [options.position] - Initial position
      * @returns {Promise}
      */
-    add (text, options) {
+    add (position) {
         return new Promise(resolve => {
             const canvas = this.getCanvas();
+
+            const text = this._options.text || defaultText
             let newText = null;
             let selectionStyle = consts.fObjectOptions.SELECTION_STYLE;
-            let styles = this._defaultStyles;
+            let styles = this._options;
 
-            this._setInitPos(options.position);
+            this._setInitPos(position);
 
-            if (options.styles) {
-                styles = snippet.extend(styles, options.styles);
-            }
-
-            newText = new fabric.IText(text, styles);
+            newText = new fabric.IText(text);
             selectionStyle = snippet.extend({}, selectionStyle, {
                 originX: 'left',
                 originY: 'top'
-            });
+            }, this._options);
 
             newText.set(selectionStyle);
             newText.hasControls = false;
@@ -139,8 +134,8 @@ export default class Text extends Component {
     _setInitPos(position) {
         position = position || this.getCanvasImage().getCenterPoint();
 
-        this._defaultStyles.left = position.x;
-        this._defaultStyles.top = position.y;
+        this._options.left = position.x;
+        this._options.top = position.y;
     }
 
     /**
@@ -152,7 +147,7 @@ export default class Text extends Component {
         console.log('text mousedown')
         const obj = fEvent.target;
 
-        if (obj && this.isText(obj)) {
+        if (obj && this.graphics.isText(obj)) {
             this.isPrevEditing = true;
             return;
         }
@@ -163,21 +158,9 @@ export default class Text extends Component {
             return;
         }
 
-        this._fireAddText(fEvent);
-    }
-
-    /**
-     * Fire 'addText' event if object is not selected.
-     * @param {fabric.Event} fEvent - Current mousedown event on selected object
-     * @private
-     */
-    _fireAddText(fEvent) {
-        // const obj = fEvent.target;
         const e = fEvent.e || {};
         const originPointer = this.getCanvas().getPointer(e);
 
-        this.add('double click', {
-            position: originPointer
-        })
+        this.add(originPointer)
     }
 }

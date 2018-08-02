@@ -5,6 +5,9 @@
  * @param {Graphics} graphics - Graphics instance
  * @ignore
  */
+import _ from 'lodash';
+const optionsFilter = ['mode', 'type', 'text']
+
 export default class Component {
     constructor(name, graphics) {
         /**
@@ -120,12 +123,7 @@ export default class Component {
         this.graphics.adjustCanvasDimension();
     }
 
-    isText (obj) {
-        if (!obj) return false;
-        return obj.type === 'text' || obj.type === 'i-text'
-    }
-
-    shouldMouseDown (obj) {
+    shouldDraw (obj) {
         // return !obj || !this.isText(obj)
         return true
     }
@@ -141,5 +139,24 @@ export default class Component {
 
     unRegistry () {
         this.getStack().stackPop;
+    }
+
+    createOptions (options) {
+        this._options = _.merge({}, this._options, _.omit(options, ...optionsFilter));
+    }
+
+    beforeStart (options) {
+        const canvas = this.getCanvas()
+        this.createOptions(options);
+        canvas.defaultCursor = 'crosshair';
+    }
+
+    finishDraw () {
+        const canvas = this.getCanvas()
+        canvas.forEachObject(obj => {
+            if (this.graphics.isText(obj)) {
+                canvas.bringToFront(obj);
+            }
+        });
     }
 }

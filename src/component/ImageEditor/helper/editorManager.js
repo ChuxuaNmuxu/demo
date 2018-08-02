@@ -27,7 +27,26 @@ class Manager {
         return this.graphicsMap[canvasId]
     }
 
+    save (id, options = {}) {
+        const {type = 'image/png', quality = 1} = options
 
+        const graphics = this.getGraphics(id);
+        const canvas = graphics.getCanvas();
+
+        canvas.deactivateAll().renderAll()
+
+        return document.querySelector(`#${id}`);
+        // const canvasNode = document.querySelector(`#${id}`);
+
+        // const dataUrl = canvasNode.toDataURL(type, quality);
+
+        // const img = document.createElement('img');
+        // img.src = dataUrl;
+
+        // img.onload = () => {
+        //     document.querySelector('#copy').appendChild(img)
+        // }
+    }
 }
 
 export default new Manager()

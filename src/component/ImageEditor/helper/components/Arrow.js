@@ -6,6 +6,11 @@ export default class Arrow extends Component {
     startPoint = {}
     endPoint = {}
     angle = 0
+    _options = {
+        lockMovementX: true,
+        lockMovementY: true,
+        fill: 'red'
+    }
 
     CONST = {
         edgeLen: 50,
@@ -16,14 +21,9 @@ export default class Arrow extends Component {
         super(consts.componentNames.ARROW, graphics)
     }
 
-    start() {
-        this._isSelected = false;
-
+    start(options) {
+        this.beforeStart(options)
         const canvas = this.getCanvas();
-
-        canvas.defaultCursor = 'crosshair';
-        canvas.selection = false;
-        canvas.uniScaleTransform = true;
 
         canvas.on({
             'mouse:down': this.fabricMouseDown
@@ -33,11 +33,9 @@ export default class Arrow extends Component {
     end () { 
         const canvas = this.getCanvas();
 
-        this._isSelected = false;
-
         canvas.defaultCursor = 'default';
 
-        canvas.selection = true;
+        // canvas.selection = true;
         canvas.uniScaleTransform = false;
         canvas.off({
             'mouse:down': this.fabricMouseDown
@@ -48,7 +46,7 @@ export default class Arrow extends Component {
     }
 
     fabricMouseDown = (fEvent) => {
-        if (!this.shouldMouseDown(fEvent.target)) return;
+        if (!this.shouldDraw(fEvent.target)) return;
         const canvas = this.getCanvas();
         this.startPoint = canvas.getPointer(fEvent.e);
 
@@ -110,20 +108,17 @@ export default class Arrow extends Component {
          L ${this.polygonVertex[10]} ${this.polygonVertex[11]}
          z`
 
-        const pathObject = new fabric.Path(path, {
-            lockMovementX: true,
-            lockMovementY: true
-        });
+        const pathObject = new fabric.Path(path, this._options);
 
         pathObject.hasBorders = false;
         pathObject.hasControls = false;
 
         canvas.add(pathObject);
         
-        pathObject.sendToBack()
+        // pathObject.sendToBack()
+        this.finishDraw()
         this._shapeObj = pathObject
     }
-
 
     //在CONST中定义的edgeLen以及angle参数
     //短距离画箭头的时候会出现箭头头部过大，修改：

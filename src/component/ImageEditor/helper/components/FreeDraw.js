@@ -43,7 +43,8 @@ class FreeDrawing extends Component {
             });
             path.hasBorders = false;
             path.hasControls = false;
-            path.sendToBack();
+            // path.sendToBack();
+            this.finishDraw()
             this.registry(path)
 
             canvas.deactivateAll()

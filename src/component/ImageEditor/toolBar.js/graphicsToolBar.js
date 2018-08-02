@@ -46,6 +46,7 @@ export default (options) => DecoratedComponent => {
         }
 
         handleStart = () => {
+            console.log(49, canvasOptions)
             this.graphics.startDrawingMode(mode, canvasOptions);
 
             const {handleStart} = this.props;

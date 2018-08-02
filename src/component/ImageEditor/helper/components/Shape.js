@@ -59,14 +59,7 @@ export default class Shape extends Component {
          * @type {Object}
          * @private
          */
-        this._options = _.merge({}, DEFAULT_OPTIONS);
-
-        /**
-         * Whether the shape object is selected or not
-         * @type {boolean}
-         * @private
-         */
-        this._isSelected = false;
+        this._options = DEFAULT_OPTIONS;
 
         /**
          * Pointer for drawing shape (x, y)
@@ -87,14 +80,12 @@ export default class Shape extends Component {
      * Start to draw the shape on canvas
      * @ignore
      */
-    start() {
+    start (options) {
+        this.beforeStart(options);
+
+        this._type = options.type || DEFAULT_TYPE;
         const canvas = this.getCanvas();
 
-        this._isSelected = false;
-
-        canvas.defaultCursor = 'crosshair';
-        canvas.selection = false;
-        canvas.uniScaleTransform = true;
         canvas.on({
             'mouse:down': this._onFabricMouseDown
         });
@@ -110,11 +101,9 @@ export default class Shape extends Component {
     end () {
         const canvas = this.getCanvas();
 
-        this._isSelected = false;
-
         canvas.defaultCursor = 'default';
 
-        canvas.selection = true;
+        // canvas.selection = true;
         canvas.uniScaleTransform = false;
         canvas.off({
             'mouse:down': this._onFabricMouseDown
@@ -211,9 +200,7 @@ export default class Shape extends Component {
      * @private
      */
     _onFabricMouseDown = (fEvent) => {
-        // if (fEvent.target) {}
-        console.log(231, fEvent.target)
-        if (!this.shouldMouseDown(fEvent.target)) return;
+        if (!this.shouldDraw(fEvent.target)) return;
         const canvas = this.getCanvas();
         this._startPoint = canvas.getPointer(fEvent.e);
 
@@ -270,8 +257,8 @@ export default class Shape extends Component {
             canvas.deactivateAll()
             shape.selectable = false;
 
-            shape.sendToBack();
-            console.log(158)
+            // shape.sendToBack();
+            this.finishDraw()
         }
 
         // this.fire(eventNames.ADD_OBJECT_AFTER, this.graphics.createObjectProperties(shape));

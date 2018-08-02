@@ -21,6 +21,10 @@ const backstoreOnly = {
     backstoreOnly: true
 };
 
+const defaultCanvasOptions = {
+    selection: false
+}
+
 class Graphics {
     _canvas;
     _drawingMode = drawingModes.NORMAL;
@@ -43,6 +47,11 @@ class Graphics {
 
     }
 
+    isText (obj) {
+        if (!obj) return false;
+        return obj.type === 'text' || obj.type === 'i-text'
+    }
+
     initImage (image, options) {
         const imageComponent = new Image(this);
 
@@ -52,7 +61,8 @@ class Graphics {
     }
 
     initFabric (elementId, options) {
-        this._canvas = new fabric.Canvas(elementId, options);
+        this._canvas = new fabric.Canvas(elementId, Object.assign({}, defaultCanvasOptions, options));
+        this._canvas.selection = false;
     }
 
     registryComponentModule () {
@@ -83,7 +93,7 @@ class Graphics {
 
         const drawingComponentInstance = this.getComponent(mode);
         if (drawingComponentInstance && drawingComponentInstance.start) {
-            drawingComponentInstance.start(this, option);
+            drawingComponentInstance.start(option);
 
             this._drawingMode = mode;
         }

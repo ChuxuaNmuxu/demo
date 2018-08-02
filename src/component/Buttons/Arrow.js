@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import {graphicsToolBar} from '../ImageEditor';
 
 @graphicsToolBar({
-    mode: 'arrow'
+    mode: 'arrow',
+    fill: 'red'
 })
 export default class Shape extends Component {
     static propTypes = {

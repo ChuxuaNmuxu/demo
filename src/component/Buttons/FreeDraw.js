@@ -3,7 +3,9 @@ import PropTypes from 'prop-types'
 import {graphicsToolBar} from '../ImageEditor';
 
 @graphicsToolBar({
-    mode: 'freeDraw'
+    mode: 'freeDraw',
+    width: '2',
+    color: 'red'
 })
 export default class Shape extends Component {
     static propTypes = {
