@@ -78,7 +78,10 @@ export default class Arrow extends Component {
             this.registry(shape)
 
             canvas.deactivateAll()
+            
             shape.selectable = false;
+            shape.hasBorders = false;
+            shape.hasControls = false;
         }
 
         // this.fire(eventNames.ADD_OBJECT_AFTER, this.graphics.createObjectProperties(shape));
@@ -87,9 +90,6 @@ export default class Arrow extends Component {
             'mouse:move': this.fabricMouseMove,
             'mouse:up': this.fabricMouseUp
         });
-
-        shape.hasBorders = false;
-        shape.hasControls = false;
 
         this._shapeObj = null;
     }

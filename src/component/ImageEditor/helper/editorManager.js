@@ -35,7 +35,8 @@ class Manager {
 
         canvas.deactivateAll().renderAll()
 
-        return document.querySelector(`#${id}`);
+        return graphics.getCanvasElement()
+        // return document.querySelector(`#${id}`);
         // const canvasNode = document.querySelector(`#${id}`);
 
         // const dataUrl = canvasNode.toDataURL(type, quality);

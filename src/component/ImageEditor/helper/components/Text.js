@@ -122,7 +122,7 @@ export default class Text extends Component {
             this.registry(newText)
 
             this.isPrevEditing = true;
-            resolve(this.graphics.createObjectProperties(newText));
+            resolve(newText);
         });
     }
 
